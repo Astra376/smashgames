@@ -33,17 +33,6 @@
           <div class="card-content">
             <h3>{{ game.title }}</h3>
             <p class="description">{{ game.description }}</p>
-            
-            <div class="stats-row" v-if="game.released">
-              <div class="stat">
-                <i class="fas fa-users"></i>
-                <span>{{ formatNumber(game.playerCount) }}</span>
-              </div>
-              <div class="stat">
-                <i class="fas fa-thumbs-up"></i>
-                <span>{{ game.likePercentage }}%</span>
-              </div>
-            </div>
           </div>
         </div>
       </swiper-slide>
@@ -69,16 +58,7 @@ export default defineComponent({
     games: { type: Array, required: true },
   },
   setup() {
-    const formatNumber = (num) => {
-      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-      return num;
-    };
-
-    return {
-      Pagination, Navigation, Autoplay,
-      formatNumber
-    };
+    return { Pagination, Navigation, Autoplay };
   },
 });
 </script>
@@ -96,14 +76,14 @@ export default defineComponent({
   padding-top: 10px;
 }
 
-/* Custom Nav Arrows */
 .custom-prev, .custom-next {
   position: absolute;
   top: 45%;
   transform: translateY(-50%);
   width: 50px;
   height: 50px;
-  background: #333;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -116,13 +96,15 @@ export default defineComponent({
 
 .custom-prev:hover, .custom-next:hover {
   background: var(--primary);
+  border-color: var(--primary);
 }
 
 .custom-prev { left: 0; }
 .custom-next { right: 0; }
 
 .game-card {
-  background: #151515; /* Solid dark background */
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   overflow: hidden;
   transition: transform 0.3s ease;
@@ -132,7 +114,7 @@ export default defineComponent({
 }
 
 .game-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px);
 }
 
 .image-container {
@@ -150,7 +132,7 @@ export default defineComponent({
 }
 
 .game-card:hover .image-container img {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .overlay {
@@ -178,10 +160,10 @@ export default defineComponent({
   gap: 8px;
 }
 
-.play-btn:hover { background: #0056b3; }
+.play-btn:hover { background: var(--primary-hover); }
 
 .coming-soon-badge {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -195,19 +177,7 @@ export default defineComponent({
 }
 
 .card-content h3 { font-size: 1.4rem; margin: 0 0 8px; color: white; }
-.description { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
-
-.stats-row {
-  display: flex;
-  gap: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 15px;
-  color: #ccc;
-  font-size: 0.9rem;
-}
-
-.stat { display: flex; align-items: center; gap: 6px; }
-.stat i { color: var(--primary); }
+.description { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0; flex-grow: 1; }
 
 /* Custom Swiper Styles */
 :deep(.swiper-pagination-bullet) { background: white; opacity: 0.3; width: 10px; height: 10px; }

@@ -34,18 +34,16 @@
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-brand">
-          <img src="@/assets/logo.png" alt="Logo" class="footer-logo"/>
+          <h3>Smash Games</h3>
           <p>Breaking barriers. Smashing expectations.</p>
         </div>
         <div class="social-links">
-          <a href="#" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
-          <a href="#" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="https://www.roblox.com/groups/8338753/Smash-Games" target="_blank" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
         </div>
-        <div class="copyright">
-          <p>© 2024 Smash Games. All rights reserved.</p>
-        </div>
+        <p class="copyright">© 2024 Smash Games. All rights reserved.</p>
       </div>
     </footer>
   </div>
@@ -91,21 +89,17 @@ export default defineComponent({
 </script>
 
 <style>
-/* --- GLOBAL VARIABLES --- */
+/* Global Reset & Variables */
 :root {
   --primary: #007bff;
   --primary-hover: #0056b3;
-  --bg-dark: #0a0a0f; /* Solid dark, no gradient */
+  --bg-dark: #0a0a0f; /* Solid dark background */
   --bg-card: #151515;
   --text-main: #ffffff;
   --text-muted: #a0a0a0;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
   --font-main: "Kanit", sans-serif;
   --nav-height: 80px;
-}
-
-/* --- RESET & BASE --- */
-*, *::before, *::after {
-  box-sizing: border-box;
 }
 
 body {
@@ -114,11 +108,9 @@ body {
   color: var(--text-main);
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  line-height: 1.6;
 }
 
-/* --- HEADER --- */
+/* Header & Nav */
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -130,7 +122,8 @@ body {
 
 .header-scrolled {
   background: rgba(10, 10, 15, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: var(--glass-border);
+  height: 70px;
 }
 
 .header-content {
@@ -146,40 +139,32 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   color: white;
-  z-index: 1002;
-  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.5px;
 }
 
-.logo-img { height: 40px; width: auto; }
-.logo-text { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; text-transform: uppercase; white-space: nowrap; }
+.logo-img { height: 40px; }
 
-/* --- NAVIGATION --- */
 .nav { display: flex; align-items: center; gap: 3rem; }
 
-.nav-links-wrapper {
-  display: flex;
-  gap: 2.5rem;
-}
+.nav-links-wrapper { display: flex; gap: 2.5rem; }
 
 .nav-link {
   text-decoration: none;
   color: var(--text-muted);
   font-weight: 500;
+  transition: color 0.3s;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: color 0.3s;
-  position: relative;
   white-space: nowrap;
 }
 
-.nav-link:not(.standout):hover, 
-.nav-link:not(.standout).router-link-active { 
-  color: var(--text-main); 
-}
+.nav-link:hover, .nav-link.router-link-active { color: white; }
 
 .nav-link.standout {
   padding: 0.6rem 1.8rem;
@@ -190,14 +175,11 @@ body {
   transition: all 0.3s;
 }
 
-.nav-link.standout:hover {
-  transform: translateY(-2px);
-  background: var(--primary-hover);
-}
+.nav-link.standout:hover { transform: translateY(-2px); background: var(--primary-hover); }
 
-/* --- MOBILE MENU --- */
-.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; z-index: 1002; }
-.menu-icon { display: block; width: 28px; height: 2px; background: white; position: relative; transition: 0.3s; }
+/* Mobile Menu */
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
+.menu-icon { display: block; width: 25px; height: 2px; background: white; position: relative; transition: 0.3s; }
 .menu-icon::before, .menu-icon::after { content: ''; position: absolute; width: 100%; height: 2px; background: white; transition: 0.3s; }
 .menu-icon::before { top: -8px; }
 .menu-icon::after { top: 8px; }
@@ -206,50 +188,40 @@ body {
 .menu-icon.open::before { top: 0; transform: rotate(45deg); }
 .menu-icon.open::after { top: 0; transform: rotate(-45deg); }
 
-/* --- MAIN CONTENT --- */
-.main-content { min-height: 100vh; display: flex; flex-direction: column; }
-
-.page-fade-enter-active, .page-fade-leave-active { transition: opacity 0.4s ease, transform 0.4s ease; }
-.page-fade-enter-from, .page-fade-leave-to { opacity: 0; transform: translateY(10px); }
-
-/* --- FOOTER --- */
+/* Footer */
 .footer {
-  background: #050505;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #050508;
+  border-top: var(--glass-border);
   padding: 4rem 2rem 2rem;
   text-align: center;
 }
 
-.footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-.footer-logo { height: 50px; margin-bottom: 1rem; opacity: 0.8; }
-.footer-brand p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+.footer-content { max-width: 1200px; margin: 0 auto; }
+.footer-brand h3 { margin: 0 0 10px; font-size: 1.5rem; color: white; }
+.footer-brand p { color: var(--text-muted); font-weight: 300; }
 
-.social-links { display: flex; gap: 2rem; margin: 1rem 0; }
-.social-links a { color: var(--text-muted); font-size: 1.5rem; transition: 0.3s; }
+.social-links { margin: 2rem 0; display: flex; justify-content: center; gap: 1.5rem; }
+.social-links a { color: var(--text-muted); font-size: 1.4rem; transition: 0.3s; }
 .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-.copyright p { color: #444; font-size: 0.8rem; margin: 0; }
+.copyright { color: #555; font-size: 0.8rem; margin-top: 3rem; }
 
-@media (max-width: 1024px) {
-  .nav { gap: 1.5rem; }
-  .nav-links-wrapper { gap: 1.5rem; }
-}
+/* Transitions */
+.page-fade-enter-active, .page-fade-leave-active { transition: opacity 0.4s ease, transform 0.4s ease; }
+.page-fade-enter-from, .page-fade-leave-to { opacity: 0; transform: translateY(10px); }
 
+/* Mobile Queries */
 @media (max-width: 768px) {
-  .mobile-menu-btn { display: block; }
-  
+  .mobile-menu-btn { display: block; z-index: 1002; }
   .nav {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     background: #0a0a0f;
     flex-direction: column; justify-content: center;
-    padding: 2rem;
-    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    transform: translateX(100%); transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1);
     z-index: 1001;
   }
   .nav.nav-open { transform: translateX(0); }
-  
-  .nav-links-wrapper { display: flex; flex-direction: column; gap: 2rem; align-items: center; margin-bottom: 2rem; width: 100%; }
+  .nav-links-wrapper { display: flex; flex-direction: column; gap: 2rem; align-items: center; margin-bottom: 2rem; }
   .nav-link { font-size: 1.5rem; }
-  .nav-link.standout { width: 100%; text-align: center; max-width: 300px; }
 }
 </style>

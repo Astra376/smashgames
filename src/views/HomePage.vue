@@ -24,11 +24,6 @@
             </router-link>
           </div>
         </div>
-
-        <div class="scroll-indicator">
-          <span>Scroll</span>
-          <div class="line"></div>
-        </div>
       </div>
     </div>
 
@@ -97,11 +92,10 @@ export default defineComponent({
   background-color: #0a0a0f;
 }
 
-/* Subtle background, no crazy gradients */
 .background-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at top center, #151520 0%, #0a0a0f 60%);
+  background: #0a0a0f; /* Solid dark background, no gradients */
   z-index: 0;
 }
 
@@ -149,7 +143,7 @@ export default defineComponent({
 .tagline .highlight {
   display: block;
   font-weight: 800;
-  color: var(--primary); /* Solid color instead of gradient */
+  color: var(--primary); /* Solid Primary Color */
   margin-top: 0.5rem;
 }
 
@@ -187,33 +181,16 @@ export default defineComponent({
 }
 
 .cta-button.secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
 }
 
 .cta-button.secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: white;
+  color: #0a0a0f;
   transform: translateY(-3px);
 }
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  animation: fadeUp 1s ease-out 1s forwards;
-  z-index: 10;
-}
-
-.scroll-indicator span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
-.scroll-indicator .line { width: 1px; height: 40px; background: white; opacity: 0.5; }
 
 .section-wrapper {
   position: relative;
@@ -224,7 +201,7 @@ export default defineComponent({
 }
 
 .section-header { text-align: center; margin-bottom: 60px; }
-.section-header h2 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+.section-header h2 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: white; }
 .section-header .divider { width: 80px; height: 4px; background: var(--primary); margin: 0 auto; border-radius: 2px; }
 
 @keyframes fadeUp {
