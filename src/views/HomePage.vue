@@ -1,30 +1,54 @@
 <template>
   <section id="home">
     <div class="home-page" ref="homePageRef" :class="{ 'visible': isVisible }">
-      <div class="content">
-        <img src="@/assets/logo 2.png" alt="Company Logo" class="logo" />
-        <p class="tagline">Breaking barriers and smashing expectations.</p>
-        <div class="cta-container">
-          <router-link to="/careers" class="cta-button primary" :class="{ 'pulse': isPulsing }">Join Us</router-link>
-          <router-link to="/games" class="cta-button secondary">Explore Games</router-link>
+      
+      <div class="background-overlay"></div>
+      <ParticlesBackground ref="particlesContainer" class="particles-layer" />
+
+      <div class="hero-content">
+        <div class="logo-wrapper">
+          <img src="@/assets/logo 2.png" alt="Company Logo" class="logo" />
+          <div class="logo-glow"></div>
         </div>
-        <div class="gap-before-featured-games"></div>
-        <section id="featured-games" class="featured-games-section">
-          <div class="gap-before-featured-games" style="height: 20px;"></div>
-          <FeaturedGames :games="featuredGames" />
-        </section>
-        <section id="about">
-          <AboutSection />
-        </section>
+
+        <h1 class="tagline">
+          Breaking barriers.<br />
+          <span class="highlight">Smashing expectations.</span>
+        </h1>
+
+        <div class="cta-container">
+          <router-link to="/careers" class="cta-button primary">
+            <span>Join the Team</span>
+            <div class="shine"></div>
+          </router-link>
+          <router-link to="/games" class="cta-button secondary">
+            Explore Games
+          </router-link>
+        </div>
       </div>
-      <ParticlesBackground ref="particlesContainer" />
+
+      <div class="scroll-indicator">
+        <span>Scroll to Explore</span>
+        <div class="line"></div>
+      </div>
     </div>
+
+    <section id="featured-games" class="section-wrapper">
+      <div class="section-header">
+        <h2>Featured Titles</h2>
+        <div class="divider"></div>
+      </div>
+      <FeaturedGames :games="featuredGames" />
+    </section>
+
+    <section id="about" class="section-wrapper alt-bg">
+      <AboutSection />
+    </section>
   </section>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, ref } from 'vue';
 import { useIntersectionObserver } from '@vueuse/core';
 import FeaturedGames from '@/components/FeaturedGames.vue';
 import AboutSection from '@/components/AboutSection.vue';
@@ -38,8 +62,7 @@ export default defineComponent({
     ParticlesBackground,
   },
   setup() {
-    const router = useRouter();
-
+    // Game Data
     const featuredGames = ref([
       { id: 1, title: 'Robot Tycoon', description: 'Build and manage your own robot empire', thumbnail: 'src/assets/RobotTycoon.webp', playerCount: 5300, playSessions: 38000000, likePercentage: 71, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
       { id: 2, title: 'Solar System Adventure', description: 'Explore the mysteries of space', thumbnail: 'src/assets/SolarSystemAdventure.webp', playerCount: 150, playSessions: 2800000, likePercentage: 46, released: true, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
@@ -55,16 +78,6 @@ export default defineComponent({
 
     const homePageRef = ref(null);
     const isVisible = ref(false);
-    const isPulsing = ref(false);
-
-    const getRandomParticleStyle = () => {
-      return {
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        animationDelay: `${Math.random() * 15}s`,
-        animationDuration: `${10 + Math.random() * 10}s`
-      };
-    };
 
     useIntersectionObserver(homePageRef, ([{ isIntersecting }]) => {
       if (isIntersecting) {
@@ -72,205 +85,259 @@ export default defineComponent({
       }
     });
 
-    let pulseInterval;
-    onMounted(() => {
-      pulseInterval = setInterval(() => {
-        isPulsing.value = true;
-        setTimeout(() => {
-          isPulsing.value = false;
-        }, 1000);
-      }, 5000);
-
-      console.log('HomePage Loaded');
-    });
-
-    onUnmounted(() => {
-      if (pulseInterval) {
-        clearInterval(pulseInterval);
-      }
-    });
-
     return { 
       featuredGames,
       homePageRef,
       isVisible,
-      isPulsing,
-      getRandomParticleStyle
     };
   }
 });
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;600;800&display=swap');
+
+/* --- Global Variables & Reset --- */
+:root {
+  --primary-color: #007bff;
+  --accent-color: #00d4ff;
+  --bg-dark: #0a0a0f;
+  --bg-darker: #050508;
+  --text-white: #ffffff;
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
 
 .home-page {
   position: relative;
-  min-height: 100vh;
-  color: #ffffff;
-  overflow: hidden;
+  min-height: 100vh; /* Hero takes full height */
+  color: var(--text-white);
   font-family: "Kanit", sans-serif;
-  background: linear-gradient(to bottom, #1a1a2e, #16213e);
-}
-
-.content {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 100px 20px;
-  text-align: center;
-}
-
-.logo {
-  width: clamp(200px, 35%, 400px);
-  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
-  animation: fadeInUp 1s ease 0.5s forwards, glow 2s ease-in-out infinite alternate;
-  margin: auto;
-  display: block;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.tagline {
-  font-size: clamp(1.5rem, 3vw, 2.4rem);
-  font-weight: 400;
-  margin: 2rem auto;
-  color: #ffffff;
-  opacity: 0;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  transform: translateY(20px);
-  animation: fadeInUp 1s ease 0.7s forwards;
-  max-width: 800px;
-}
-
-.cta-container {
+  background-color: var(--bg-dark);
+  overflow-x: hidden;
   display: flex;
-  justify-content: center;
-  gap: clamp(1rem, 3rem, 4rem);
-  margin-top: 6rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 1s ease 0.9s forwards;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
-.cta-button {
-  padding: clamp(1rem, 1.5rem, 2rem) clamp(2rem, 3rem, 4rem);
-  font-size: clamp(1rem, 1.5rem, 2rem);
-  font-weight: bold;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.cta-button.primary {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: #ffffff;
-}
-
-.cta-button.secondary {
-  background-color: transparent;
-  color: #007bff;
-  border: 2px solid #007bff;
-  backdrop-filter: blur(5px);
-}
-
-.cta-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
-}
-
-.cta-button:active {
-  transform: scale(0.95);
-}
-
-.cta-button.pulse {
-  animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1);
-}
-
-.particle-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+/* --- Background Styling --- */
+.background-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100vh;
+  background: radial-gradient(circle at 50% -20%, #1a2542 0%, #0a0a0f 70%);
   z-index: 0;
+}
+
+.particles-layer {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100vh;
+  z-index: 1;
+  opacity: 0.6; /* Subtle particles */
   pointer-events: none;
 }
 
-.particle {
+/* --- Hero Section --- */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.logo-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: clamp(200px, 30vw, 450px);
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+}
+
+/* A soft glow behind the logo instead of on it */
+.logo-glow {
   position: absolute;
-  width: 5px;
-  height: 5px;
-  background: radial-gradient(circle at center, rgba(0, 123, 255, 0.8), rgba(0, 123, 255, 0));
-  border-radius: 50%;
-  animation: float 15s infinite linear;
-  will-change: transform;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(0, 123, 255, 0.4) 0%, transparent 70%);
+  filter: blur(40px);
+  z-index: 1;
+  opacity: 0;
+  animation: pulseGlow 4s infinite alternate;
 }
 
-@keyframes float {
-  0% { 
-    transform: translate(0, 0) rotate(0deg); 
-  }
-  25% { 
-    transform: translate(25px, -25px) rotate(90deg); 
-  }
-  50% { 
-    transform: translate(50px, -50px) rotate(180deg); 
-  }
-  75% { 
-    transform: translate(25px, -25px) rotate(270deg); 
-  }
-  100% { 
-    transform: translate(0, 0) rotate(360deg); 
-  }
+.tagline {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 200;
+  line-height: 1.1;
+  margin-bottom: 3.5rem;
+  letter-spacing: -1px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.tagline .highlight {
+  display: block;
+  font-weight: 800;
+  background: linear-gradient(90deg, #fff, #aabfe0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+/* --- CTA Buttons --- */
+.cta-container {
+  display: flex;
+  gap: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards;
 }
 
-@keyframes glow {
-  from {
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
-  }
-  to {
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9));
-  }
+.cta-button {
+  position: relative;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px; /* Slightly rounded, not full pill */
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.gap-before-featured-games {
-  height: clamp(150px, 300px, 400px);
+.cta-button.primary {
+  background: #007bff;
+  color: white;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
 
+.cta-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5);
+}
+
+.cta-button.primary .shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-20deg);
+  transition: 0.5s;
+}
+
+.cta-button.primary:hover .shine {
+  left: 200%;
+  transition: 0.7s;
+}
+
+.cta-button.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.cta-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* --- Scroll Indicator --- */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.7;
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 2;
+  animation: fadeUp 1s 1.5s forwards;
+}
+
+.scroll-indicator .line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #fff, transparent);
+}
+
+/* --- Content Sections --- */
+.section-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: 80px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-wrapper.alt-bg {
+  /* Optional: distinct background for About section */
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.3));
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.section-header .divider {
+  width: 60px;
+  height: 4px;
+  background: #007bff;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+/* --- Animations --- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  from { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+  to { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
-  .content {
-    padding: 60px 16px;
-  }
-  
-  .cta-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .cta-button {
-    width: 100%;
-    max-width: 300px;
-  }
+  .tagline { font-size: 2rem; }
+  .logo { width: 70%; }
+  .cta-container { flex-direction: column; width: 100%; max-width: 300px; }
+  .cta-button { width: 100%; }
 }
 </style>
