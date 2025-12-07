@@ -1,249 +1,110 @@
 <template>
-  <div>
-    <div class="banner">
-      <img src="@/assets/collaboration.jpg" alt="Company Banner">
-      <div class="banner-text">
-        <h1>Join Our Team</h1>
-        <p>Help Shape the Future of Gaming</p>
+  <div class="page-container">
+    <div class="header-spacer"></div>
+    
+    <div class="intro-section">
+      <h1>Join the <span class="highlight">Revolution</span></h1>
+      <p>We are looking for visionaries to build the next generation of Roblox experiences.</p>
+    </div>
+
+    <div class="jobs-grid">
+      <div v-for="(job, index) in jobs" :key="index" class="job-card">
+        <div class="job-header">
+          <h3>{{ job.title }}</h3>
+          <span class="job-type">Full Time</span>
+        </div>
+        <p class="job-desc">{{ job.description }}</p>
+        <ul class="job-tags">
+          <li v-for="tag in job.tags" :key="tag">{{ tag }}</li>
+        </ul>
+        <router-link to="/contact" class="apply-btn">Apply Now <i class="fas fa-arrow-right"></i></router-link>
       </div>
     </div>
-    <div class="careers-page">
-      <div class="careers-content">
-        <section class="intro-section">
-          <h2>Work With Us</h2>
-          <p>At Smash Games, we're looking for passionate individuals who want to push the boundaries of what's possible in gaming. Join our team of innovators and help create the next generation of immersive experiences.</p>
-        </section>
 
-        <section class="positions-section">
-          <h2>Open Positions</h2>
-          <div class="positions-grid">
-            <div class="position-card">
-              <h3>Senior Game Developer</h3>
-              <p>Create engaging gameplay mechanics and systems using Lua/Roblox</p>
-              <ul>
-                <li>5+ years game development experience</li>
-                <li>Strong Lua programming skills</li>
-                <li>Experience with Roblox Studio</li>
-              </ul>
-              <router-link to="/contact" class="apply-button">Apply Now</router-link>
-            </div>
-
-            <div class="position-card">
-              <h3>3D Artist</h3>
-              <p>Design and create stunning 3D assets and environments</p>
-              <ul>
-                <li>3+ years 3D modeling experience</li>
-                <li>Proficiency in Blender/Maya</li>
-                <li>Strong artistic vision</li>
-              </ul>
-              <router-link to="/contact" class="apply-button">Apply Now</router-link>
-            </div>
-
-            <div class="position-card">
-              <h3>Game Designer</h3>
-              <p>Design compelling game mechanics and player experiences</p>
-              <ul>
-                <li>3+ years game design experience</li>
-                <li>Strong understanding of player psychology</li>
-                <li>Experience with Roblox games</li>
-              </ul>
-              <router-link to="/contact" class="apply-button">Apply Now</router-link>
-            </div>
-          </div>
-        </section>
-
-        <section class="benefits-section">
-          <h2>Benefits</h2>
-          <div class="benefits-grid">
-            <div class="benefit-item">
-              <h3>Competitive Salary</h3>
-              <p>We offer industry-leading compensation packages</p>
-            </div>
-            <div class="benefit-item">
-              <h3>Remote Work</h3>
-              <p>Work from anywhere in the world</p>
-            </div>
-            <div class="benefit-item">
-              <h3>Learning Budget</h3>
-              <p>Annual budget for courses and conferences</p>
-            </div>
-            <div class="benefit-item">
-              <h3>Health Benefits</h3>
-              <p>Comprehensive health and wellness coverage</p>
-            </div>
-          </div>
-        </section>
+    <div class="perks-section">
+      <h2>Why Smash Games?</h2>
+      <div class="perks-grid">
+        <div class="perk"><span>🌍</span> Remote First</div>
+        <div class="perk"><span>💰</span> Competitive Pay</div>
+        <div class="perk"><span>🏥</span> Health Coverage</div>
+        <div class="perk"><span>🚀</span> Growth Budget</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  name: 'CareersPage'
+  name: 'CareersPage',
+  setup() {
+    const jobs = ref([
+      { 
+        title: 'Senior Game Developer', 
+        description: 'Master of Lua? Lead our engineering efforts and create complex systems.',
+        tags: ['Roblox Studio', 'Lua', '5+ Years']
+      },
+      { 
+        title: '3D Environmental Artist', 
+        description: 'Build breathtaking worlds that players get lost in.',
+        tags: ['Blender', 'Maya', 'Low Poly']
+      },
+      { 
+        title: 'Game Designer', 
+        description: 'Craft the loops and mechanics that keep players coming back.',
+        tags: ['System Design', 'Monetization', 'Analytics']
+      }
+    ]);
+    return { jobs };
+  }
 });
 </script>
 
 <style scoped>
-.careers-page {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-family: "Kanit", sans-serif;
+.page-container { max-width: 1000px; margin: 0 auto; padding: 0 20px 100px; }
+.header-spacer { height: 120px; }
+.highlight { color: var(--primary); }
+
+.intro-section { text-align: center; margin-bottom: 60px; }
+.intro-section h1 { font-size: 3rem; margin-bottom: 15px; }
+.intro-section p { color: var(--text-muted); font-size: 1.2rem; }
+
+.jobs-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 80px; }
+
+.job-card {
+  background: var(--bg-card);
+  border: var(--glass-border);
+  padding: 30px;
+  border-radius: 12px;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
-.banner {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  width: 100%;
-}
+.job-card:hover { border-color: var(--primary); transform: translateX(5px); }
 
-.banner img {
-  width: 100%;
-  height: 100vh;
-  object-fit: cover;
-}
+.job-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.job-header h3 { font-size: 1.5rem; margin: 0; }
+.job-type { background: rgba(0, 123, 255, 0.1); color: var(--primary); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
 
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
+.job-desc { color: var(--text-muted); margin-bottom: 20px; }
 
-.banner-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+.job-tags { list-style: none; padding: 0; display: flex; gap: 10px; margin-bottom: 25px; }
+.job-tags li { background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 4px; font-size: 0.85rem; color: #ccc; }
+
+.apply-btn {
+  align-self: flex-start;
   color: white;
-  z-index: 1;
-}
-
-.banner-text h1 {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
-
-.banner-text p {
-  font-size: 1.5rem;
-}
-
-.careers-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-
-.intro-section {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.intro-section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.intro-section p {
-  font-size: 1.2rem;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.positions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.position-card {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
-
-.position-card:hover {
-  transform: translateY(-5px);
-}
-
-.position-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.position-card ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 1rem 0;
-}
-
-.position-card li {
-  margin-bottom: 0.5rem;
-}
-
-.apply-button {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+  transition: 0.2s;
 }
+.apply-btn:hover { color: var(--primary); gap: 15px; }
 
-.apply-button:hover {
-  background-color: #0056b3;
-}
-
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.benefit-item {
-  text-align: center;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-.benefit-item h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-}
-
-section {
-  margin-bottom: 4rem;
-}
-
-section h2 {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-@media (max-width: 768px) {
-  .banner-text h1 {
-    font-size: 2.5rem;
-  }
-
-  .banner-text p {
-    font-size: 1.2rem;
-  }
-
-  .careers-content {
-    padding: 2rem 1rem;
-  }
-}
+.perks-section h2 { text-align: center; margin-bottom: 40px; font-size: 2rem; }
+.perks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.perk { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 8px; text-align: center; font-weight: 600; border: 1px solid transparent; }
+.perk span { display: block; font-size: 2rem; margin-bottom: 10px; }
 </style>

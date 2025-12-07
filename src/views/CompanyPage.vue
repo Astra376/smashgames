@@ -1,246 +1,95 @@
 <template>
-  <div>
-    <div class="banner">
-      <img src="@/assets/company-banner.png" alt="Company Banner">
-      <div class="banner-text">
-        <h1>About Our Company</h1>
-        <p>Building the Future of Gaming</p>
+  <div class="page-wrapper">
+    <div class="header-spacer"></div>
+    
+    <section class="company-intro">
+      <h1>We Are <span class="gradient-text">Smash Games</span></h1>
+      <p class="mission-statement">
+        A collective of gamers, dreamers, and creators pushing the boundaries of the Roblox platform.
+      </p>
+    </section>
+
+    <div class="grid-layout">
+      <div class="info-card wide">
+        <h2>Our Mission</h2>
+        <p>To create immersive, high-energy experiences that connect millions of players worldwide. We don't just build games; we build communities where friendships are forged in the heat of battle.</p>
       </div>
-    </div>
-    <div class="company-page">
-      <div class="company-content">
-        <section class="intro-section">
-          <h2>Who We Are</h2>
-          <p>Smash Games is a pioneering game development studio focused on creating innovative and immersive gaming experiences. Founded by passionate gamers, we strive to push the boundaries of what's possible in the gaming industry.</p>
-        </section>
 
-        <section class="mission-section">
-          <h2>Our Mission</h2>
-          <div class="positions-grid">
-            <div class="position-card">
-              <h3>Innovation</h3>
-              <p>We're committed to developing groundbreaking gaming technologies and experiences</p>
-              <ul>
-                <li>Cutting-edge game development</li>
-                <li>Advanced gaming technologies</li>
-                <li>Creative gameplay mechanics</li>
-              </ul>
-            </div>
-
-            <div class="position-card">
-              <h3>Community</h3>
-              <p>Building and nurturing an engaged gaming community</p>
-              <ul>
-                <li>Player-focused development</li>
-                <li>Active community engagement</li>
-                <li>Regular player events</li>
-              </ul>
-            </div>
-
-            <div class="position-card">
-              <h3>Quality</h3>
-              <p>Delivering exceptional gaming experiences</p>
-              <ul>
-                <li>Rigorous quality standards</li>
-                <li>Polished game mechanics</li>
-                <li>Engaging storytelling</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section class="values-section">
-          <h2>Our Values</h2>
-          <div class="benefits-grid">
-            <div class="benefit-item">
-              <h3>Creativity</h3>
-              <p>Encouraging innovative ideas and unique solutions</p>
-            </div>
-            <div class="benefit-item">
-              <h3>Excellence</h3>
-              <p>Striving for the highest quality in everything we do</p>
-            </div>
-            <div class="benefit-item">
-              <h3>Collaboration</h3>
-              <p>Working together to achieve extraordinary results</p>
-            </div>
-            <div class="benefit-item">
-              <h3>Player Focus</h3>
-              <p>Putting our players at the heart of every decision</p>
-            </div>
-          </div>
-        </section>
+      <div class="values-section">
+        <div class="value-card">
+          <i class="fas fa-rocket"></i>
+          <h3>Innovation</h3>
+          <p>We refuse to settle for the status quo. We experiment, we iterate, and we evolve.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-users"></i>
+          <h3>Community</h3>
+          <p>Our players are our heartbeat. We build with them, for them.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-star"></i>
+          <h3>Quality</h3>
+          <p>Polished mechanics. Stunning visuals. Zero compromise.</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-bolt"></i>
+          <h3>Impact</h3>
+          <p>Creating moments that leave a lasting impression.</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
-  
-  <script>
-  import { defineComponent } from 'vue';
-  
-  export default defineComponent({
-    name: 'CompanyPage'
-  });
-  </script>
-  
-  <style scoped>
-  .company-page {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: "Kanit", sans-serif;
-  }
-  
-  .banner {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-    width: 100%;
-  }
-  
-  .banner img {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-  }
-  
-  .banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .banner-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    z-index: 1;
-  }
-  
-  .banner-text h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-  }
-  
-  .banner-text p {
-    font-size: 1.5rem;
-  }
-  
-  .company-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-  }
-  
-  .intro-section {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-  
-  .intro-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .intro-section p {
-    font-size: 1.2rem;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .positions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  .position-card {
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-  }
-  
-  .position-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .position-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .position-card ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 1rem 0;
-  }
-  
-  .position-card li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .apply-button {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  .apply-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  .benefit-item {
-    text-align: center;
-    padding: 2rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
-  
-  .benefit-item h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-  }
-  
-  section {
-    margin-bottom: 4rem;
-  }
-  
-  section h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  @media (max-width: 768px) {
-    .banner-text h1 {
-      font-size: 2.5rem;
-    }
-  
-    .banner-text p {
-      font-size: 1.2rem;
-    }
-  
-    .company-content {
-      padding: 2rem 1rem;
-    }
-  }
-  </style>
+
+<script>
+import { defineComponent } from 'vue';
+export default defineComponent({ name: 'CompanyPage' });
+</script>
+
+<style scoped>
+.page-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px 100px;
+}
+.header-spacer { height: 120px; }
+
+.company-intro { text-align: center; margin-bottom: 80px; }
+.company-intro h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 20px; }
+.gradient-text {
+  background: linear-gradient(120deg, #fff, #007bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.mission-statement { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+.info-card {
+  background: var(--bg-card);
+  border: var(--glass-border);
+  padding: 40px;
+  border-radius: 16px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.info-card h2 { font-size: 2rem; margin-bottom: 20px; color: var(--primary); }
+.info-card p { font-size: 1.1rem; line-height: 1.6; color: #ddd; }
+
+.values-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.value-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 30px 20px;
+  border-radius: 12px;
+  text-align: center;
+  transition: 0.3s;
+}
+.value-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-5px); }
+.value-card i { font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
+.value-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+.value-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+</style>

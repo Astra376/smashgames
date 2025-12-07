@@ -1,165 +1,116 @@
 <template>
-    <div class="banner">
-      <img src="@/assets/company-banner.png" alt="Company Banner">
-      <div class="banner-text">
-        <h1>Join the Smash Games Revolution</h1>
-        <p>Unlock Your Gaming Potential</p>
-      </div>
-    </div>
-  <div class="company-page">
-    <LoadingSpinner v-if="loading" />
-    <ErrorMessage v-else-if="error" :message="error" />
+  <div class="page-container">
+    <div class="header-spacer"></div>
     
-    <div v-else class="company-content">
-        
-    <div class="about-section">
-      <h2>About Us</h2>
-      <p>Smash Games is a dynamic and fast-paced game publisher on Roblox known for creating engaging, high-energy experiences that captivate players. Specializing in games with quick reflexes, competitive gameplay, and vibrant design, Smash Games delivers action-packed fun that keeps users coming back for more.</p>
-      <p>Their titles are celebrated for their creative mechanics, responsive controls, and immersive challenges, making them a standout in the Roblox gaming community.</p>
+    <div class="games-hero">
+      <h1>Our <span class="highlight">Universe</span></h1>
+      <p>Explore worlds where imagination meets adrenaline.</p>
     </div>
-    <div class="our-values">
-      <h2>Our Values</h2>
-      <div class="values-grid">
-        <div class="value-item">
-          <h3>Innovation</h3>
-          <p>Pioneering new ideas and pushing boundaries.</p>
+
+    <div class="games-grid-container">
+      <div v-for="game in games" :key="game.id" class="game-card">
+        <div class="image-wrapper">
+          <img :src="game.thumbnail" :alt="game.title" loading="lazy">
+          <div class="overlay">
+            <a v-if="game.released" :href="game.link" target="_blank" class="play-btn">Play Now</a>
+            <span v-else class="coming-soon">Coming Soon</span>
+          </div>
         </div>
-        <div class="value-item">
-          <h3>Community</h3>
-          <p>Building a community that shares our passion.</p>
-        </div>
-        <div class="value-item">
-          <h3>Excellence</h3>
-          <p>Striving for excellence in every aspect.</p>
-        </div>
-        <div class="value-item">
-          <h3>Fun</h3>
-          <p>Creating experiences that bring joy and excitement.</p>
+        <div class="card-info">
+          <h3>{{ game.title }}</h3>
+          <p>{{ game.description }}</p>
+          <div class="stats" v-if="game.released">
+            <span><i class="fas fa-user"></i> {{ formatNumber(game.playerCount) }} playing</span>
+            <span><i class="fas fa-thumbs-up"></i> {{ game.likePercentage }}%</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="join-us">
-      <router-link to="/careers" class="join-button">Join Us</router-link>
-      <div class="space-under-button"></div> <!-- Added space under the join us button -->
-    </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted, watch, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
-import LoadingSpinner from '@/components/LoadingSpinner.vue';
-import ErrorMessage from '@/components/ErrorMessage.vue';
+import { defineComponent, ref } from 'vue';
 
-export default {
-  name: 'CompanyPage',
-  components: {
-    LoadingSpinner,
-    ErrorMessage,
-  },
-
+export default defineComponent({
+  name: 'GamesPage',
   setup() {
-    const router = useRouter();
+    const games = ref([
+      { id: 1, title: 'Robot Tycoon', description: 'Build your mechanical empire.', thumbnail: 'src/assets/RobotTycoon.webp', playerCount: 5300, likePercentage: 71, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
+      { id: 2, title: 'Solar System Adventure', description: 'Traverse the galaxy.', thumbnail: 'src/assets/SolarSystemAdventure.webp', playerCount: 150, likePercentage: 46, released: true, link: '#' },
+      { id: 4, title: 'Mars Warfare', description: 'Dominate the red planet.', thumbnail: 'src/assets/MarsWarefareTycoon.webp', playerCount: 350, likePercentage: 52, released: true, link: '#' },
+      { id: 6, title: 'Chaos Playground', description: 'Pure physics mayhem.', thumbnail: 'src/assets/ChaosPlayground.webp', playerCount: 350, likePercentage: 42, released: true, link: '#' },
+      { id: 7, title: 'Billionaire Empire', description: 'Rise to the top.', thumbnail: 'src/assets/BillionaireEmpireTycoon.webp', playerCount: 200, likePercentage: 81, released: true, link: '#' },
+      { id: 5, title: 'Animal World', description: 'Survive the wild.', thumbnail: 'src/assets/AnimalWorld.png', playerCount: 400, likePercentage: 29, released: true, link: '#' },
+      { id: 8, title: 'My School', description: 'Create your dream school.', thumbnail: 'src/assets/ComingSoon.png', released: false },
+    ]);
+
+    const formatNumber = (num) => {
+      return num > 999 ? (num/1000).toFixed(1) + 'k' : num;
+    };
+
+    return { games, formatNumber };
   }
-}
+});
 </script>
 
 <style scoped>
-.company-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  font-family: "Kanit", sans-serif;
-  text-align: center;margin: 0 20px; /* Added margin left and right */
+.page-container {
+  min-height: 100vh;
+  padding: 0 20px 100px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+.header-spacer { height: 100px; }
 
-.banner {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  width: 100%;
-  margin-top: -80px;
-}
+.games-hero { text-align: center; margin-bottom: 60px; }
+.games-hero h1 { font-size: 3rem; margin-bottom: 10px; }
+.games-hero p { color: var(--text-muted); font-size: 1.2rem; }
+.highlight { color: var(--primary); }
 
-.banner img {
-  width: 100%;
-  height: 100vh;
-  object-fit: cover;
-}
-
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Added a semi-transparent background to make white text stand out */
-}
-
-.banner-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #ffffff;
-  text-align: center;
-}
-
-.banner-text h1 {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.about-section {
-  margin-bottom: 40px; /* Increased margin-bottom for better spacing */
-}
-
-.our-values {
-  margin-bottom: 40px; /* Increased margin-bottom for better spacing */
-}
-
-.values-grid {
+.games-grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
 }
 
-.value-item {
-  background-color: #007bff; /* Changed background color to blue */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.game-card {
+  background: var(--bg-card);
+  border: var(--glass-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.3s ease;
 }
 
-.value-item h3 {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
+.game-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-.join-us {
-  text-align: center;
-}
+.image-wrapper { position: relative; height: 200px; overflow: hidden; }
+.image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+.game-card:hover .image-wrapper img { transform: scale(1.1); }
 
-.join-button {
-  background-color: var(--primary-color);
-  color: #ffffff;
-  padding: 10px 20px;
-  border-radius: 20px;
+.overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: 0.3s;
+}
+.game-card:hover .overlay { opacity: 1; }
+
+.play-btn {
+  padding: 10px 25px;
+  background: var(--primary);
+  color: white;
   text-decoration: none;
+  border-radius: 20px;
   font-weight: bold;
-  transition: background-color var(--transition-speed);
+  transform: scale(0.9); transition: 0.3s;
 }
+.play-btn:hover { transform: scale(1); box-shadow: 0 0 15px var(--primary-glow); }
 
-.join-button:hover {
-  background-color: var(--secondary-color);
-}
+.card-info { padding: 20px; }
+.card-info h3 { margin: 0 0 5px; font-size: 1.2rem; }
+.card-info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
 
-.space-under-button {
-  height: 40px; /* Added space under the join us button */
-}
+.stats { display: flex; justify-content: space-between; font-size: 0.85rem; color: #888; }
+.stats i { color: var(--primary); margin-right: 5px; }
 </style>

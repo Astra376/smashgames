@@ -1,91 +1,52 @@
 <template>
   <section class="contact-page">
-    <h1 class="section-title animate-in">Contact Us</h1>
-    <div class="contact-container">
+    <div class="header-spacer"></div>
+    
+    <div class="contact-header">
+      <h1>Get in <span class="highlight">Touch</span></h1>
+      <p>Have an idea? Want to work with us? Send us a signal.</p>
+    </div>
+
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <div class="info-block">
+          <h3>Other Channels</h3>
+          <p class="sub-text">We are active across the metaverse.</p>
+          
+          <div class="channels">
+            <a href="mailto:contact@smashgames.com" class="channel-link">
+              <i class="fas fa-envelope"></i> contact@smashgames.com
+            </a>
+            <a href="#" class="channel-link">
+              <i class="fab fa-discord"></i> Join our Discord
+            </a>
+            <a href="#" class="channel-link">
+              <i class="fab fa-twitter"></i> @SmashGames
+            </a>
+          </div>
+        </div>
+      </div>
+
       <form class="contact-form" @submit.prevent="submitForm">
         <div class="form-group">
           <label for="name">Name</label>
-          <input 
-            type="text"
-            id="name"
-            v-model="formData.name"
-            required
-            placeholder="Enter your name"
-            minlength="2"
-            maxlength="50"
-          >
+          <input type="text" id="name" v-model="formData.name" placeholder="Your Name" required>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-            type="email" 
-            id="email"
-            v-model="formData.email"
-            required
-            placeholder="Enter your email"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="subject">Subject</label>
-          <input
-            type="text"
-            id="subject"
-            v-model="formData.subject"
-            required
-            placeholder="Enter subject"
-            minlength="3"
-            maxlength="100"
-          >
+          <input type="email" id="email" v-model="formData.email" placeholder="name@example.com" required>
         </div>
 
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea
-            id="message"
-            v-model="formData.message"
-            required
-            placeholder="Enter your message"
-            rows="6"
-            minlength="10"
-            maxlength="1000"
-          ></textarea>
-          <span class="character-count">{{ formData.message.length }}/1000</span>
+          <textarea id="message" v-model="formData.message" rows="5" placeholder="What's on your mind?" required></textarea>
         </div>
 
         <button type="submit" class="submit-btn" :disabled="isSubmitting">
-          <span v-if="!isSubmitting">Send Message</span>
-          <span v-else>Sending...</span>
+          {{ isSubmitting ? 'Sending...' : 'Send Message' }}
         </button>
       </form>
-
-      <div class="contact-info">
-        <h3>Other Ways to Reach Us</h3>
-        <div class="info-item">
-          <i class="fas fa-envelope"></i>
-          <a href="mailto:support@example.com" style="text-align: left">support@example.com</a>
-        </div>
-        <div class="info-item">
-          <i class="fas fa-phone"></i>
-          <a href="tel:+15551234567" style="text-align: left">+1 (555) 123-4567</a>
-        </div>
-        <div class="info-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <a href="https://maps.google.com/?q=123+Gaming+Street,+Game+City,+GC+12345" target="_blank" style="text-align: left">
-            123 Gaming Street, Game City, GC 12345
-          </a>
-        </div>
-        <div class="social-links">
-          <a href="#" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        </div>
-      </div>
     </div>
   </section>
 </template>
@@ -96,255 +57,96 @@ import { defineComponent, ref } from 'vue';
 export default defineComponent({
   name: 'ContactPage',
   setup() {
-    const formData = ref({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
-    
+    const formData = ref({ name: '', email: '', message: '' });
     const isSubmitting = ref(false);
 
-    const validateForm = () => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.value.email)) {
-        throw new Error('Please enter a valid email address');
-      }
-      if (formData.value.message.length < 10) {
-        throw new Error('Message must be at least 10 characters long');
-      }
-    };
-
     const submitForm = async () => {
-      if (isSubmitting.value) return;
-      
-      try {
-        isSubmitting.value = true;
-        validateForm();
-        
-        // Simulate API call with delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        console.log('Form submitted:', formData.value);
-        formData.value = {
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        };
-        //alert('Message sent successfully!');
-      } catch (error) {
-        console.error('Error submitting form:', error);
-       // alert(error.message || 'There was an error sending your message. Please try again.');
-      } finally {
-        isSubmitting.value = false;
-      }
+      isSubmitting.value = true;
+      // Simulate API
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Sent:', formData.value);
+      formData.value = { name: '', email: '', message: '' };
+      isSubmitting.value = false;
     };
 
-    return {
-      formData,
-      isSubmitting,
-      submitForm
-    };
+    return { formData, isSubmitting, submitForm };
   }
 });
 </script>
 
 <style scoped>
-.contact-page {
-  padding: 60px 20px;
-  max-width: 2000px;
-  margin: 0 20%;
-  min-height: calc(100vh - 160px);
-}
+.contact-page { max-width: 1100px; margin: 0 auto; padding: 0 20px 100px; }
+.header-spacer { height: 120px; }
 
-.section-title {
-  text-align: center;
-  font-size: 3rem;
-  margin-bottom: 40px;
-  color: #ffffff;
-  font-weight: 700;
-}
+.contact-header { text-align: center; margin-bottom: 60px; }
+.contact-header h1 { font-size: 3rem; margin-bottom: 10px; }
+.highlight { color: var(--primary); }
 
-.contact-container {
+.contact-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  background: #1a1a1a;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  padding: 30px;
-  backdrop-filter: blur(10px);
+  grid-template-columns: 1fr 1.5fr;
+  gap: 50px;
+  background: var(--bg-card);
+  border: var(--glass-border);
+  padding: 50px;
+  border-radius: 20px;
 }
 
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+.contact-info h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.sub-text { color: var(--text-muted); margin-bottom: 30px; }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: #e0e0e0;
-  font-size: 0.95rem;
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 12px 16px;
-  border: 2px solid #333;
+.channel-link {
+  display: flex; align-items: center; gap: 15px;
+  color: white; text-decoration: none;
+  padding: 15px;
+  background: rgba(255,255,255,0.03);
   border-radius: 8px;
+  margin-bottom: 15px;
+  transition: 0.3s;
+}
+.channel-link:hover { background: rgba(0, 123, 255, 0.1); color: var(--primary); transform: translateX(5px); }
+
+/* Form Styles */
+.form-group { margin-bottom: 25px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: #ccc; }
+
+input, textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  color: white;
+  font-family: inherit;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  background: rgba(40, 40, 40, 0.9);
-  color: #fff;
+  transition: 0.3s;
+  box-sizing: border-box; /* Fixes padding issues */
 }
 
-.form-group input:hover,
-.form-group textarea:hover {
-  border-color: #4a9eff;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
+input:focus, textarea:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
-}
-
-.character-count {
-  position: absolute;
-  bottom: -20px;
-  right: 0;
-  font-size: 0.8rem;
-  color: #999;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .submit-btn {
-  background: #007bff;
+  width: 100%;
+  padding: 15px;
+  background: var(--primary);
   color: white;
-  padding: 15px 30px;
   border: none;
   border-radius: 8px;
+  font-weight: bold;
   font-size: 1.1rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  transition: 0.3s;
 }
 
-.submit-btn:not(:disabled):hover {
-  background: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,123,255,0.3);
-}
-
-.submit-btn:disabled {
-  background: #444;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.contact-info {
-  padding: 20px;
-  background: #222;
-  border-radius: 10px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-}
-
-.contact-info h3 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  color: #e0e0e0;
-  border-bottom: 2px solid #007bff;
-  padding-bottom: 10px;
-}
-
-.info-item {
-  margin-bottom: 15px;
-  transition: transform 0.3s ease;
-}
-
-.info-item:hover {
-  transform: translateX(5px);
-}
-
-.info-item i {
-  font-size: 1.2rem;
-  color: #007bff;
-  width: 25px;
-  text-align: left;
-}
-
-.info-item a {
-  color: #e0e0e0;
-  text-decoration: none;
-  transition: color 0.3s ease;
-  text-align: left;
-  width: 100%;
-}
-
-.info-item a:hover {
-  color: #007bff;
-}
-
-.social-links {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.social-links a {
-  color: #007bff;
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-  color: #4a9eff;
-  transform: translateY(-3px);
-}
+.submit-btn:hover:not(:disabled) { background: #0069d9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
+.submit-btn:disabled { background: #333; cursor: not-allowed; opacity: 0.7; }
 
 @media (max-width: 768px) {
-  .contact-container {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
-
-  .section-title {
-    font-size: 2.5rem;
-  }
-  
-  .contact-info {
-    order: -1;
-  }
-  
-  .social-links {
-    margin-top: 20px;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-in {
-  animation: fadeIn 0.8s ease-out forwards;
+  .contact-wrapper { grid-template-columns: 1fr; padding: 30px; }
 }
 </style>

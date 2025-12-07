@@ -1,47 +1,49 @@
 <template>
-  <div id="app" ref="app" class="app dark-mode">
+  <div id="app" class="app">
     <header class="header" :class="{ 'header-scrolled': isScrolled }">
       <div class="header-content">
         <router-link to="/" class="logo">
-          <img src="@/assets/logo.png" alt="Smash Games" class="logo-img" />
+          <img src="@/assets/logo 2.png" alt="Smash Games" class="logo-img" />
           <span class="logo-text">Smash Games</span>
         </router-link>
+        
         <button class="mobile-menu-btn" @click="toggleMobileMenu" aria-label="Toggle menu">
-          <span class="menu-icon"></span>
+          <span class="menu-icon" :class="{ 'open': isMobileMenuOpen }"></span>
         </button>
+
         <nav class="nav" :class="{ 'nav-open': isMobileMenuOpen }">
-          <router-link to="/#home" class="nav-link" @click="closeMobileMenu">Home</router-link>
-          <router-link to="/#featured-games" class="nav-link no-underline" @click="closeMobileMenu">Games</router-link>
-          <router-link to="/#about" class="nav-link no-underline" @click="closeMobileMenu">About</router-link>
-          <router-link to="/company" class="nav-link" @click="closeMobileMenu">Company</router-link>
-          <router-link to="/careers" class="nav-link" @click="closeMobileMenu">Careers</router-link>
-          <div class="gap-before-contact"></div>
-          <router-link to="/contact" class="nav-link standout no-underline" @click="closeMobileMenu">Contact</router-link>
+          <div class="nav-links-wrapper">
+            <router-link to="/" class="nav-link" @click="closeMobileMenu">Home</router-link>
+            <router-link to="/games" class="nav-link" @click="closeMobileMenu">Games</router-link>
+            <router-link to="/company" class="nav-link" @click="closeMobileMenu">Company</router-link>
+            <router-link to="/careers" class="nav-link" @click="closeMobileMenu">Careers</router-link>
+          </div>
+          <router-link to="/contact" class="nav-link standout" @click="closeMobileMenu">Contact Us</router-link>
         </nav>
       </div>
     </header>
+
     <main class="main-content">
       <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition name="page-fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
     </main>
+
     <footer class="footer">
       <div class="footer-content">
-        <div class="footer-section">
-          <h3>Follow Us</h3>
-          <div class="social-links">
-            <a href="#" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.roblox.com/groups/8338753/Smash-Games#!/about" target="_blank" rel="noopener" aria-label="Roblox"><img src="@/assets/roblox.png" alt="Roblox" /></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-          </div>
+        <div class="footer-brand">
+          <h3>Smash Games</h3>
+          <p>Breaking barriers. Smashing expectations.</p>
         </div>
-        <p class="copyright">&copy; 2024 Smash Games. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
+        </div>
+        <p class="copyright">© 2024 Smash Games. All rights reserved.</p>
       </div>
     </footer>
   </div>
@@ -55,13 +57,11 @@ import '@fortawesome/fontawesome-free/css/all.css';
 export default defineComponent({
   name: 'App',
   setup() {
-    const router = useRouter();
     const isScrolled = ref(false);
     const isMobileMenuOpen = ref(false);
-    const app = ref(null);
 
     const handleScroll = () => {
-      isScrolled.value = window.scrollY > 50;
+      isScrolled.value = window.scrollY > 20;
     };
 
     const toggleMobileMenu = () => {
@@ -70,20 +70,13 @@ export default defineComponent({
     };
 
     const closeMobileMenu = () => {
-      if (isMobileMenuOpen.value) {
-        isMobileMenuOpen.value = false;
-        document.body.style.overflow = '';
-      }
+      isMobileMenuOpen.value = false;
+      document.body.style.overflow = '';
     };
 
     onMounted(() => {
       window.addEventListener('scroll', handleScroll);
       window.addEventListener('resize', closeMobileMenu);
-      window.addEventListener('click', (e) => {
-        if (isMobileMenuOpen.value && !app.value.contains(e.target)) {
-          closeMobileMenu();
-        }
-      });
     });
 
     onUnmounted(() => {
@@ -91,296 +84,140 @@ export default defineComponent({
       window.removeEventListener('resize', closeMobileMenu);
     });
 
-    return {
-      app,
-      isScrolled,
-      isMobileMenuOpen,
-      toggleMobileMenu,
-      closeMobileMenu
-    };
+    return { isScrolled, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu };
   }
 });
 </script>
 
 <style>
+/* Global Reset & Variables */
 :root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
-  --background-color: #1a1a1a;
-  --text-color: #ffffff;
-  --header-bg: rgba(44, 44, 44, 0.5);
-  --footer-bg: #2c2c2c;
-  --transition-speed: 0.3s;
-  --logout-color: #dc3545;
-  --border-radius: 8px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --primary: #007bff;
+  --primary-glow: rgba(0, 123, 255, 0.4);
+  --bg-dark: #0a0a0f;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --font-main: "Kanit", sans-serif;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  font-family: "Kanit", sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-  background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #2a2a2a);
-  overflow-x: hidden;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
 }
 
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-x: hidden;
-}
-
+/* Header & Nav */
 .header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 1000;
-  background-color: var(--header-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all var(--transition-speed);
-  width: 100%;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
 }
 
 .header-scrolled {
-  box-shadow: var(--box-shadow);
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(15px);
+  border-bottom: var(--glass-border);
 }
 
 .header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  max-width: 100%;
-  margin: 0 auto;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
   text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.5px;
 }
 
-.logo-img {
-  height: 2.5rem;
-  width: auto;
-}
+.logo-img { height: 40px; }
 
-.logo-text {
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--text-color);
-  transition: color var(--transition-speed);
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  z-index: 1001;
-}
-
-.menu-icon {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background-color: var(--text-color);
-  position: relative;
-  transition: background-color var(--transition-speed);
-}
-
-.menu-icon::before,
-.menu-icon::after {
-  content: '';
-  position: absolute;
-  width: 24px;
-  height: 2px;
-  background-color: var(--text-color);
-  transition: transform var(--transition-speed);
-}
-
-.menu-icon::before {
-  transform: translateY(-8px);
-}
-
-.menu-icon::after {
-  transform: translateY(8px);
-}
-
-.nav {
-  display: flex;
-  gap: 1.5rem;
-  align-items: center;
-}
+.nav { display: flex; align-items: center; gap: 2rem; }
 
 .nav-link {
   text-decoration: none;
-  color: var(--text-color);
+  color: var(--text-muted);
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  transition: all var(--transition-speed);
-  position: relative;
-  white-space: nowrap;
+  transition: color 0.3s;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.nav-link:not(.standout)::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: var(--primary-color);
-  transform: scaleX(0);
-  transition: transform var(--transition-speed);
-  transform-origin: center;
+.nav-link:hover, .nav-link.router-link-active { color: white; }
+
+.nav-link.standout {
+  padding: 0.6rem 1.5rem;
+  background: var(--primary);
+  color: white;
+  border-radius: 4px;
+  font-weight: 600;
+  box-shadow: 0 0 15px var(--primary-glow);
+  transition: all 0.3s;
 }
 
-.nav-link:not(.standout):hover::after,
-.nav-link:not(.standout).router-link-active:not(.no-underline)::after {
-  transform: scaleX(1);
-}
+.nav-link.standout:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--primary-glow); }
 
-.standout {
-  background-color: var(--primary-color);
-  color: #ffffff;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
-}
+/* Mobile Menu */
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; }
+.menu-icon { display: block; width: 25px; height: 2px; background: white; position: relative; transition: 0.3s; }
+.menu-icon::before, .menu-icon::after { content: ''; position: absolute; width: 100%; height: 2px; background: white; transition: 0.3s; }
+.menu-icon::before { top: -8px; }
+.menu-icon::after { top: 8px; }
 
-.standout:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-}
+.menu-icon.open { background: transparent; }
+.menu-icon.open::before { top: 0; transform: rotate(45deg); }
+.menu-icon.open::after { top: 0; transform: rotate(-45deg); }
 
-.gap-before-contact {
-  width: 2rem;
-}
-
-.main-content {
-  flex-grow: 1;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity var(--transition-speed);
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
+/* Footer */
 .footer {
-  background-color: var(--footer-bg);
-  color: var(--text-color);
-  padding: 2rem 1rem;
-  margin-top: auto;
-  transition: background-color var(--transition-speed);
-  width: 100%;
-}
-
-.footer-content {
-  max-width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.footer-section {
+  background: #050508;
+  border-top: var(--glass-border);
+  padding: 4rem 2rem 2rem;
   text-align: center;
 }
 
-.social-links {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
+.footer-content { max-width: 1200px; margin: 0 auto; }
+.footer-brand h3 { margin: 0 0 10px; font-size: 1.5rem; }
+.footer-brand p { color: var(--text-muted); font-weight: 300; }
 
-.social-links a {
-  color: var(--text-color);
-  font-size: 1.5rem;
-  transition: color var(--transition-speed), transform var(--transition-speed);
-}
+.social-links { margin: 2rem 0; display: flex; justify-content: center; gap: 1.5rem; }
+.social-links a { color: var(--text-muted); font-size: 1.4rem; transition: 0.3s; }
+.social-links a:hover { color: var(--primary); transform: translateY(-3px); }
 
-.social-links a:hover {
-  color: var(--primary-color);
-  transform: translateY(-2px);
-}
+.copyright { color: #555; font-size: 0.8rem; margin-top: 3rem; }
 
-.copyright {
-  margin: 0;
-  opacity: 0.8;
-}
+/* Transitions */
+.page-fade-enter-active, .page-fade-leave-active { transition: opacity 0.4s ease, transform 0.4s ease; }
+.page-fade-enter-from, .page-fade-leave-to { opacity: 0; transform: translateY(10px); }
 
-@media (max-width: 1024px) {
-  .header-content {
-    padding: 1rem;
-  }
-}
-
+/* Mobile Queries */
 @media (max-width: 768px) {
-  .mobile-menu-btn {
-    display: block;
-  }
-
+  .mobile-menu-btn { display: block; z-index: 1002; }
   .nav {
-    position: fixed;
-    top: 72px;
-    left: 0;
-    right: 0;
-    background-color: var(--header-bg);
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
-    transform: translateY(-150%);
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-speed);
-    height: calc(100vh - 72px);
-    overflow-y: auto;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background: #0a0a0f;
+    flex-direction: column; justify-content: center;
+    transform: translateX(100%); transition: 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 1001;
   }
-
-  .nav-open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .gap-before-contact {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo-text {
-    font-size: 1.5rem;
-  }
-
-  .logo-img {
-    height: 2rem;
-  }
-
-  .nav-link {
-    width: 100%;
-    text-align: center;
-  }
+  .nav.nav-open { transform: translateX(0); }
+  .nav-links-wrapper { display: flex; flex-direction: column; gap: 2rem; align-items: center; margin-bottom: 2rem; }
+  .nav-link { font-size: 1.5rem; }
 }
 </style>
