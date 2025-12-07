@@ -235,10 +235,7 @@ export default defineComponent({
 }
 
 .scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Removed absolute positioning for perfect flex alignment */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -246,9 +243,17 @@ export default defineComponent({
   opacity: 0;
   animation: fadeUp 1s ease-out 1s forwards;
   z-index: 10;
+  padding-bottom: 30px; /* Keeps it pinned to bottom via flex layout */
 }
 
-.scroll-indicator span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
+.scroll-indicator span { 
+  font-size: 0.8rem; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
+  opacity: 0.7;
+  padding-left: 2px; /* Offsets the trailing letter-spacing for perfect centering */
+}
+
 .scroll-indicator .line { width: 1px; height: 40px; background: linear-gradient(to bottom, #fff, transparent); }
 
 .section-wrapper {
