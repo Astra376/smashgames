@@ -1,10 +1,15 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+// Fix for "__dirname" in ES Modules
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default defineConfig({
-  // 1. Translated 'publicPath' to Vite's 'base' property
-  base: process.env.NODE_ENV === "production" ? "/vue-deploy/" : "/",
+  // CLOUDFLARE FIX: Always use '/' as the base
+  base: '/',
 
   plugins: [vue()],
 
