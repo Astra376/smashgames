@@ -5,31 +5,33 @@
       <div class="background-overlay"></div>
       <ParticlesBackground class="particles-layer" />
 
-      <div class="hero-content">
-        <div class="logo-wrapper">
-          <img src="@/assets/logo 2.png" alt="Company Logo" class="logo" />
-          <div class="logo-glow"></div>
+      <div class="hero-wrapper">
+        <div class="hero-content">
+          <div class="logo-wrapper">
+            <img src="@/assets/logo 2.png" alt="Company Logo" class="logo" />
+            <div class="logo-glow"></div>
+          </div>
+
+          <h1 class="tagline">
+            Breaking barriers.<br />
+            <span class="highlight">Smashing expectations.</span>
+          </h1>
+
+          <div class="cta-container">
+            <router-link to="/careers" class="cta-button primary">
+              <span>Join the Team</span>
+              <div class="shine"></div>
+            </router-link>
+            <router-link to="/games" class="cta-button secondary">
+              Explore Games
+            </router-link>
+          </div>
         </div>
 
-        <h1 class="tagline">
-          Breaking barriers.<br />
-          <span class="highlight">Smashing expectations.</span>
-        </h1>
-
-        <div class="cta-container">
-          <router-link to="/careers" class="cta-button primary">
-            <span>Join the Team</span>
-            <div class="shine"></div>
-          </router-link>
-          <router-link to="/games" class="cta-button secondary">
-            Explore Games
-          </router-link>
+        <div class="scroll-indicator">
+          <span>Scroll</span>
+          <div class="line"></div>
         </div>
-      </div>
-
-      <div class="scroll-indicator">
-        <span>Scroll</span>
-        <div class="line"></div>
       </div>
     </div>
 
@@ -53,7 +55,7 @@ import FeaturedGames from '@/components/FeaturedGames.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import ParticlesBackground from '@/components/ParticlesBackground.vue';
 
-// Import Assets properly for Vite
+// Import Assets
 import robotImg from '@/assets/RobotTycoon.webp';
 import solarImg from '@/assets/SolarSystemAdventure.webp';
 import burgerImg from '@/assets/EscapeBurtsBurgerShop.webp';
@@ -92,7 +94,8 @@ export default defineComponent({
 <style scoped>
 .home-page {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -111,19 +114,27 @@ export default defineComponent({
   z-index: 1;
 }
 
-.hero-content {
+.hero-wrapper {
   position: relative;
   z-index: 2;
-  flex: 1;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  padding: 100px 20px 40px; /* Top padding clears fixed header */
 }
 
-.logo-wrapper { position: relative; margin-bottom: 2rem; }
+.hero-content {
+  text-align: center;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-wrapper { position: relative; margin-bottom: 2rem; display: flex; justify-content: center; }
 
 .logo {
   width: clamp(200px, 30vw, 400px);
@@ -234,7 +245,7 @@ export default defineComponent({
   gap: 8px;
   opacity: 0;
   animation: fadeUp 1s ease-out 1s forwards;
-  z-index: 2;
+  z-index: 10;
 }
 
 .scroll-indicator span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }

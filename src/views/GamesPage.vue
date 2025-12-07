@@ -77,8 +77,8 @@ export default defineComponent({
 <style scoped>
 .page-container {
   min-height: 100vh;
-  padding: 0 20px 100px;
-  max-width: 1400px;
+  padding: 0 40px 100px;
+  max-width: 1600px; /* Wider container */
   margin: 0 auto;
 }
 .header-spacer { height: 120px; }
@@ -90,8 +90,9 @@ export default defineComponent({
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Optimized grid width */
   gap: 30px;
+  width: 100%;
 }
 
 .game-card {
@@ -144,6 +145,14 @@ export default defineComponent({
   display: flex; align-items: center; gap: 8px;
 }
 .play-btn:hover { background: var(--primary-hover); }
+
+.status-badge {
+  background: rgba(255,255,255,0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+}
 
 .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
 

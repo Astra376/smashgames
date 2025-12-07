@@ -1,27 +1,30 @@
 <template>
-  <section class="contact-page">
+  <div class="page-container">
     <div class="header-spacer"></div>
     
-    <div class="contact-header">
+    <div class="page-header">
       <h1>Get in <span class="highlight">Touch</span></h1>
       <p>Have an idea? Want to work with us? Send us a signal.</p>
     </div>
 
-    <div class="contact-wrapper">
-      <div class="contact-info">
-        <div class="info-block">
-          <h3>Other Channels</h3>
-          <p class="sub-text">We are active across the metaverse.</p>
+    <div class="contact-grid">
+      <div class="info-column">
+        <div class="info-card">
+          <h3>Connect</h3>
+          <p>We are active across the metaverse.</p>
           
-          <div class="channels">
-            <a href="mailto:contact@smashgames.com" class="channel-link">
-              <i class="fas fa-envelope"></i> contact@smashgames.com
+          <div class="links-stack">
+            <a href="mailto:contact@smashgames.com" class="contact-link">
+              <div class="icon-box"><i class="fas fa-envelope"></i></div>
+              <span>contact@smashgames.com</span>
             </a>
-            <a href="#" class="channel-link">
-              <i class="fab fa-discord"></i> Join our Discord
+            <a href="#" class="contact-link">
+              <div class="icon-box"><i class="fab fa-discord"></i></div>
+              <span>Join our Discord</span>
             </a>
-            <a href="#" class="channel-link">
-              <i class="fab fa-twitter"></i> @SmashGames
+            <a href="#" class="contact-link">
+              <div class="icon-box"><i class="fab fa-twitter"></i></div>
+              <span>@SmashGames</span>
             </a>
           </div>
         </div>
@@ -40,7 +43,7 @@
 
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea id="message" v-model="formData.message" rows="5" placeholder="What's on your mind?" required></textarea>
+          <textarea id="message" v-model="formData.message" rows="6" placeholder="What's on your mind?" required></textarea>
         </div>
 
         <button type="submit" class="submit-btn" :disabled="isSubmitting">
@@ -48,7 +51,7 @@
         </button>
       </form>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -67,6 +70,7 @@ export default defineComponent({
       console.log('Sent:', formData.value);
       formData.value = { name: '', email: '', message: '' };
       isSubmitting.value = false;
+      alert("Message sent!");
     };
 
     return { formData, isSubmitting, submitForm };
@@ -75,44 +79,61 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.contact-page { max-width: 1100px; margin: 0 auto; padding: 0 20px 100px; }
+.page-container { max-width: 1100px; margin: 0 auto; padding: 0 20px 100px; }
 .header-spacer { height: 120px; }
 
-.contact-header { text-align: center; margin-bottom: 60px; }
-.contact-header h1 { font-size: 3rem; margin-bottom: 10px; }
+.page-header { text-align: center; margin-bottom: 60px; }
+.page-header h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; }
+.page-header p { color: var(--text-muted); font-size: 1.1rem; }
 .highlight { color: var(--primary); }
 
-.contact-wrapper {
+.contact-grid {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 50px;
-  background: var(--bg-card);
-  border: var(--glass-border);
-  padding: 50px;
-  border-radius: 20px;
+  gap: 40px;
 }
 
-.contact-info h3 { font-size: 1.5rem; margin-bottom: 10px; }
-.sub-text { color: var(--text-muted); margin-bottom: 30px; }
+.info-card {
+  background: var(--bg-card);
+  border: var(--glass-border);
+  padding: 40px;
+  border-radius: 16px;
+  height: 100%;
+}
 
-.channel-link {
+.info-card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.info-card p { color: var(--text-muted); margin-bottom: 30px; }
+
+.links-stack { display: flex; flex-direction: column; gap: 15px; }
+
+.contact-link {
   display: flex; align-items: center; gap: 15px;
   color: white; text-decoration: none;
   padding: 15px;
   background: rgba(255,255,255,0.03);
-  border-radius: 8px;
-  margin-bottom: 15px;
+  border-radius: 10px;
   transition: 0.3s;
 }
-.channel-link:hover { background: rgba(0, 123, 255, 0.1); color: var(--primary); transform: translateX(5px); }
+.contact-link:hover { background: rgba(0, 123, 255, 0.1); transform: translateX(5px); }
+.icon-box {
+  width: 40px; height: 40px; background: rgba(0, 123, 255, 0.2);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+}
 
-/* Form Styles */
+.contact-form {
+  background: var(--bg-card);
+  border: var(--glass-border);
+  padding: 40px;
+  border-radius: 16px;
+}
+
 .form-group { margin-bottom: 25px; }
 .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: #ccc; }
 
 input, textarea {
   width: 100%;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 15px;
   border-radius: 8px;
@@ -120,14 +141,13 @@ input, textarea {
   font-family: inherit;
   font-size: 1rem;
   transition: 0.3s;
-  box-sizing: border-box; /* Fixes padding issues */
 }
 
 input:focus, textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
 .submit-btn {
@@ -143,10 +163,10 @@ input:focus, textarea:focus {
   transition: 0.3s;
 }
 
-.submit-btn:hover:not(:disabled) { background: #0069d9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
+.submit-btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
 .submit-btn:disabled { background: #333; cursor: not-allowed; opacity: 0.7; }
 
 @media (max-width: 768px) {
-  .contact-wrapper { grid-template-columns: 1fr; padding: 30px; }
+  .contact-grid { grid-template-columns: 1fr; }
 }
 </style>

@@ -133,15 +133,15 @@ body {
 }
 
 .header-scrolled {
-  background: rgba(10, 10, 15, 0.85);
+  background: rgba(10, 10, 15, 0.9);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: var(--glass-border);
-  height: 70px; /* Slightly shrink on scroll */
+  height: 70px;
 }
 
 .header-content {
-  max-width: 1400px;
+  max-width: 1600px; /* Wider container for header */
   height: 100%;
   margin: 0 auto;
   padding: 0 2rem;
@@ -157,23 +157,30 @@ body {
   text-decoration: none;
   color: white;
   z-index: 1002;
+  flex-shrink: 0; /* Prevent logo shrinking */
 }
 
 .logo-img { height: 40px; width: auto; }
-.logo-text { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; text-transform: uppercase; }
+.logo-text { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; text-transform: uppercase; white-space: nowrap; }
 
 /* --- NAVIGATION --- */
-.nav { display: flex; align-items: center; gap: 2rem; }
+.nav { display: flex; align-items: center; gap: 3rem; } /* Increased gap */
+
+.nav-links-wrapper {
+  display: flex;
+  gap: 2.5rem; /* Space between links */
+}
 
 .nav-link {
   text-decoration: none;
   color: var(--text-muted);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: color 0.3s;
   position: relative;
+  white-space: nowrap; /* Prevent squishing */
 }
 
 .nav-link:not(.standout):hover, 
@@ -195,7 +202,7 @@ body {
 }
 
 .nav-link.standout {
-  padding: 0.6rem 1.5rem;
+  padding: 0.6rem 1.8rem;
   background: var(--primary);
   color: white;
   border-radius: 50px;
@@ -221,7 +228,7 @@ body {
 .menu-icon.open::before { top: 0; transform: rotate(45deg); }
 .menu-icon.open::after { top: 0; transform: rotate(-45deg); }
 
-/* --- MAIN CONTENT & TRANSITIONS --- */
+/* --- MAIN CONTENT --- */
 .main-content { min-height: 100vh; display: flex; flex-direction: column; }
 
 .page-fade-enter-active, .page-fade-leave-active { transition: opacity 0.4s ease, transform 0.4s ease; }
@@ -246,6 +253,11 @@ body {
 .copyright p { color: #444; font-size: 0.8rem; margin: 0; }
 
 /* --- MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+  .nav { gap: 1.5rem; }
+  .nav-links-wrapper { gap: 1.5rem; }
+}
+
 @media (max-width: 768px) {
   .mobile-menu-btn { display: block; }
   

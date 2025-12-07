@@ -6,7 +6,10 @@
       :space-between="30"
       :centered-slides="false"
       :pagination="{ clickable: true, dynamicBullets: true }"
-      :navigation="true"
+      :navigation="{
+        nextEl: '.custom-next',
+        prevEl: '.custom-prev',
+      }"
       :autoplay="{ delay: 4000, disableOnInteraction: false }"
       :breakpoints="{
         640: { slidesPerView: 2, spaceBetween: 20 },
@@ -45,6 +48,9 @@
         </div>
       </swiper-slide>
     </swiper>
+
+    <div class="custom-prev"><i class="fas fa-chevron-left"></i></div>
+    <div class="custom-next"><i class="fas fa-chevron-right"></i></div>
   </div>
 </template>
 
@@ -79,13 +85,45 @@ export default defineComponent({
 
 <style scoped>
 .carousel-container {
-  padding: 20px 40px;
+  padding: 0 60px; /* Make room for arrows */
   position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .games-swiper {
   padding-bottom: 50px; /* Space for pagination */
+  padding-top: 10px;
 }
+
+/* Custom Nav Arrows */
+.custom-prev, .custom-next {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.3s;
+}
+
+.custom-prev:hover, .custom-next:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.custom-prev { left: 0; }
+.custom-next { right: 0; }
 
 .game-card {
   background: var(--bg-card);
@@ -182,7 +220,11 @@ export default defineComponent({
 .stat i { color: var(--primary); }
 
 /* Custom Swiper Styles */
-:deep(.swiper-pagination-bullet) { background: white; opacity: 0.3; }
+:deep(.swiper-pagination-bullet) { background: white; opacity: 0.3; width: 10px; height: 10px; }
 :deep(.swiper-pagination-bullet-active) { background: var(--primary); opacity: 1; }
-:deep(.swiper-button-next), :deep(.swiper-button-prev) { color: var(--primary); transform: scale(0.7); }
+
+@media (max-width: 768px) {
+  .carousel-container { padding: 0 10px; }
+  .custom-prev, .custom-next { display: none; } /* Hide arrows on mobile */
+}
 </style>
