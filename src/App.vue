@@ -1,43 +1,50 @@
 <template>
-  <div id="app">
-    <header class="header" :class="{ 'scrolled': isScrolled }">
-      <div class="header-container">
-        <router-link to="/" class="logo" @click="closeMenu">
-          <img src="@/assets/logo 2.png" alt="Smash Games" />
-          <span>SMASH GAMES</span>
+  <div id="app" class="app">
+    <header class="header" :class="{ 'header-scrolled': isScrolled || isMobileMenuOpen }">
+      <div class="header-content">
+        <router-link to="/" class="logo" @click="closeMobileMenu">
+          <img src="@/assets/logo 2.png" alt="Smash Games" class="logo-img" />
+          <span class="logo-text">Smash Games</span>
         </router-link>
         
-        <button class="menu-toggle" @click="toggleMenu">
-          <i class="fas" :class="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+        <button class="mobile-menu-btn" @click="toggleMobileMenu" aria-label="Toggle menu">
+          <span class="menu-icon" :class="{ 'open': isMobileMenuOpen }"></span>
         </button>
 
-        <nav class="nav-menu" :class="{ 'active': isMenuOpen }">
-          <router-link to="/" class="nav-link" @click="closeMenu">Home</router-link>
-          <router-link to="/games" class="nav-link" @click="closeMenu">Games</router-link>
-          <router-link to="/company" class="nav-link" @click="closeMenu">Company</router-link>
-          <router-link to="/careers" class="nav-link" @click="closeMenu">Careers</router-link>
-          <router-link to="/contact" class="nav-cta" @click="closeMenu">Get in Touch</router-link>
+        <nav class="nav" :class="{ 'nav-open': isMobileMenuOpen }">
+          <div class="nav-links-wrapper">
+            <router-link to="/" class="nav-link" @click="closeMobileMenu">Home</router-link>
+            <router-link to="/games" class="nav-link" @click="closeMobileMenu">Games</router-link>
+            <router-link to="/company" class="nav-link" @click="closeMobileMenu">Company</router-link>
+            <router-link to="/careers" class="nav-link" @click="closeMobileMenu">Careers</router-link>
+          </div>
+          <router-link to="/contact" class="nav-link standout" @click="closeMobileMenu">Contact Us</router-link>
         </nav>
       </div>
     </header>
 
-    <main>
-      <router-view />
+    <main class="main-content">
+      <router-view v-slot="{ Component }">
+        <transition name="page-fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
 
     <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-col">
-          <img src="@/assets/logo.png" alt="Smash Games" class="footer-logo" />
-          <p class="footer-desc">Breaking barriers.<br>Smashing expectations.</p>
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="@/assets/logo.png" alt="Logo" class="footer-logo"/>
+          <p>Breaking barriers. Smashing expectations.</p>
         </div>
-        <div class="footer-col links">
-          <a href="https://www.roblox.com/groups/8338753/Smash-Games" target="_blank" class="social-link"><i class="fas fa-gamepad"></i> Roblox</a>
-          <a href="#" class="social-link"><i class="fab fa-twitter"></i> Twitter</a>
-          <a href="#" class="social-link"><i class="fab fa-discord"></i> Discord</a>
+        <div class="social-links">
+          <a href="#" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a href="#" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.roblox.com/groups/8338753/Smash-Games" target="_blank" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
         </div>
-        <div class="footer-col copyright">
-          <p>&copy; 2024 Smash Games.</p>
+        <div class="copyright">
+          <p>© 2024 Smash Games. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -46,197 +53,203 @@
 
 <script>
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 export default defineComponent({
+  name: 'App',
   setup() {
     const isScrolled = ref(false);
-    const isMenuOpen = ref(false);
+    const isMobileMenuOpen = ref(false);
 
     const handleScroll = () => {
       isScrolled.value = window.scrollY > 20;
     };
 
-    const toggleMenu = () => {
-      isMenuOpen.value = !isMenuOpen.value;
+    const toggleMobileMenu = () => {
+      isMobileMenuOpen.value = !isMobileMenuOpen.value;
+      document.body.style.overflow = isMobileMenuOpen.value ? 'hidden' : '';
     };
 
-    const closeMenu = () => {
-      isMenuOpen.value = false;
+    const closeMobileMenu = () => {
+      isMobileMenuOpen.value = false;
+      document.body.style.overflow = '';
     };
 
     onMounted(() => {
       window.addEventListener('scroll', handleScroll);
+      window.addEventListener('resize', closeMobileMenu);
     });
 
     onUnmounted(() => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', closeMobileMenu);
     });
 
-    return { isScrolled, isMenuOpen, toggleMenu, closeMenu };
+    return { isScrolled, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu };
   }
 });
 </script>
 
 <style>
-/* --- GLOBAL RESET & THEME --- */
+/* --- GLOBAL VARIABLES --- */
 :root {
-  --bg-main: #09090b; /* Zinc 950 */
-  --bg-card: #18181b; /* Zinc 900 */
-  --border-color: #27272a; /* Zinc 800 */
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa; /* Zinc 400 */
-  --accent: #2563eb; /* Blue 600 */
-  --accent-hover: #3b82f6; /* Blue 500 */
-  --font-family: 'Kanit', sans-serif;
-  --max-width: 1440px;
-  --header-height: 80px;
+  --primary: #007bff;
+  --primary-hover: #0056b3;
+  --bg-dark: #0a0a0f; /* Solid dark, no gradient */
+  --bg-card: #151515;
+  --text-main: #ffffff;
+  --text-muted: #a0a0a0;
+  --font-main: "Kanit", sans-serif;
+  --nav-height: 80px;
 }
 
-* { box-sizing: border-box; }
-
-html {
-  scrollbar-gutter: stable; /* FIXES THE LAYOUT SHIFT */
+/* --- RESET & BASE --- */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  background-color: var(--bg-main);
-  color: var(--text-primary);
-  font-family: var(--font-family);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
-  line-height: 1.5;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
-
-a { text-decoration: none; color: inherit; transition: 0.2s; }
-ul { list-style: none; padding: 0; margin: 0; }
 
 /* --- HEADER --- */
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: var(--header-height);
   z-index: 1000;
-  background: transparent;
+  height: var(--nav-height);
   transition: all 0.3s ease;
   border-bottom: 1px solid transparent;
 }
 
-.header.scrolled {
-  background: rgba(9, 9, 11, 0.95); /* High opacity solid color */
-  border-bottom: 1px solid var(--border-color);
-  backdrop-filter: blur(10px);
+.header-scrolled {
+  background: rgba(10, 10, 15, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.header-container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 40px;
+.header-content {
+  max-width: 1600px;
   height: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: white;
+  z-index: 1002;
+  flex-shrink: 0;
 }
 
-.logo img { height: 36px; width: auto; }
+.logo-img { height: 40px; width: auto; }
+.logo-text { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; text-transform: uppercase; white-space: nowrap; }
 
-.nav-menu { display: flex; align-items: center; gap: 32px; }
+/* --- NAVIGATION --- */
+.nav { display: flex; align-items: center; gap: 3rem; }
+
+.nav-links-wrapper {
+  display: flex;
+  gap: 2.5rem;
+}
 
 .nav-link {
-  font-size: 0.95rem;
+  text-decoration: none;
+  color: var(--text-muted);
   font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+  position: relative;
+  white-space: nowrap;
 }
 
-.nav-link:hover, .nav-link.router-link-active {
-  color: var(--text-primary);
+.nav-link:not(.standout):hover, 
+.nav-link:not(.standout).router-link-active { 
+  color: var(--text-main); 
 }
 
-.nav-cta {
-  padding: 10px 24px;
-  background: var(--text-primary);
-  color: var(--bg-main);
-  font-weight: 600;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
-
-.nav-cta:hover {
-  background: #e4e4e7;
-}
-
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
+.nav-link.standout {
+  padding: 0.6rem 1.8rem;
+  background: var(--primary);
   color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s;
 }
+
+.nav-link.standout:hover {
+  transform: translateY(-2px);
+  background: var(--primary-hover);
+}
+
+/* --- MOBILE MENU --- */
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; z-index: 1002; }
+.menu-icon { display: block; width: 28px; height: 2px; background: white; position: relative; transition: 0.3s; }
+.menu-icon::before, .menu-icon::after { content: ''; position: absolute; width: 100%; height: 2px; background: white; transition: 0.3s; }
+.menu-icon::before { top: -8px; }
+.menu-icon::after { top: 8px; }
+
+.menu-icon.open { background: transparent; }
+.menu-icon.open::before { top: 0; transform: rotate(45deg); }
+.menu-icon.open::after { top: 0; transform: rotate(-45deg); }
+
+/* --- MAIN CONTENT --- */
+.main-content { min-height: 100vh; display: flex; flex-direction: column; }
+
+.page-fade-enter-active, .page-fade-leave-active { transition: opacity 0.4s ease, transform 0.4s ease; }
+.page-fade-enter-from, .page-fade-leave-to { opacity: 0; transform: translateY(10px); }
 
 /* --- FOOTER --- */
 .footer {
-  border-top: 1px solid var(--border-color);
-  padding: 60px 40px;
-  margin-top: auto;
   background: #050505;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4rem 2rem 2rem;
+  text-align: center;
 }
 
-.footer-container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 40px;
+.footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+.footer-logo { height: 50px; margin-bottom: 1rem; opacity: 0.8; }
+.footer-brand p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+
+.social-links { display: flex; gap: 2rem; margin: 1rem 0; }
+.social-links a { color: var(--text-muted); font-size: 1.5rem; transition: 0.3s; }
+.social-links a:hover { color: var(--primary); transform: translateY(-3px); }
+
+.copyright p { color: #444; font-size: 0.8rem; margin: 0; }
+
+@media (max-width: 1024px) {
+  .nav { gap: 1.5rem; }
+  .nav-links-wrapper { gap: 1.5rem; }
 }
 
-.footer-logo { height: 30px; opacity: 0.6; margin-bottom: 10px; }
-.footer-desc { color: var(--text-secondary); font-size: 0.9rem; }
-
-.footer-col.links { display: flex; gap: 24px; }
-.social-link {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  display: flex; align-items: center; gap: 8px;
-}
-.social-link:hover { color: var(--text-primary); }
-
-.copyright { color: #444; font-size: 0.85rem; }
-
-/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .header-container { padding: 0 20px; }
-  .menu-toggle { display: block; }
+  .mobile-menu-btn { display: block; }
   
-  .nav-menu {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--bg-main);
-    flex-direction: column;
-    padding: 40px;
-    gap: 30px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+  .nav {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background: #0a0a0f;
+    flex-direction: column; justify-content: center;
+    padding: 2rem;
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 1001;
   }
+  .nav.nav-open { transform: translateX(0); }
   
-  .nav-menu.active { transform: translateX(0); }
+  .nav-links-wrapper { display: flex; flex-direction: column; gap: 2rem; align-items: center; margin-bottom: 2rem; width: 100%; }
   .nav-link { font-size: 1.5rem; }
-  
-  .footer-container { flex-direction: column; align-items: flex-start; }
-  .footer-col.links { flex-direction: column; gap: 12px; }
+  .nav-link.standout { width: 100%; text-align: center; max-width: 300px; }
 }
 </style>

@@ -1,72 +1,84 @@
 <template>
-  <div class="home-view">
-    <section class="hero">
-      <div class="hero-bg">
-        <img src="@/assets/company-banner.png" alt="Background" />
-        <div class="overlay"></div>
-      </div>
+  <section id="home">
+    <div class="home-page" ref="homePageRef">
       
-      <div class="hero-content">
-        <img src="@/assets/logo 2.png" alt="Smash Games" class="hero-logo" />
-        <h1>
-          Breaking Barriers.<br>
-          Smashing Expectations.
-        </h1>
-        <div class="hero-buttons">
-          <router-link to="/careers" class="btn primary">Join the Team</router-link>
-          <router-link to="/games" class="btn outline">Explore Games</router-link>
-        </div>
-      </div>
-    </section>
+      <div class="background-overlay"></div>
 
-    <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Featured Titles</h2>
-          <router-link to="/games" class="view-all">View All <i class="fas fa-arrow-right"></i></router-link>
-        </div>
-        <FeaturedGames :games="featuredGames" />
-      </div>
-    </section>
-
-    <section class="section alt-bg">
-      <div class="container about-grid">
-        <div class="about-text">
-          <h2>Creating Incredible.</h2>
-          <p>We are a Roblox development studio committed to high-fidelity experiences. We move fast, ship often, and prioritize gameplay above all else.</p>
-        </div>
-        <div class="about-stats">
-          <div class="stat-item">
-            <h3>50M+</h3>
-            <p>Play Sessions</p>
+      <div class="hero-wrapper">
+        <div class="hero-content">
+          <div class="logo-wrapper">
+            <img src="@/assets/logo 2.png" alt="Company Logo" class="logo" />
           </div>
-          <div class="stat-item">
-            <h3>24/7</h3>
-            <p>Live Operations</p>
+
+          <h1 class="tagline">
+            Breaking barriers.<br />
+            <span class="highlight">Smashing expectations.</span>
+          </h1>
+
+          <div class="cta-container">
+            <router-link to="/careers" class="cta-button primary">
+              <span>Join the Team</span>
+            </router-link>
+            <router-link to="/games" class="cta-button secondary">
+              Explore Games
+            </router-link>
           </div>
         </div>
+
+        <div class="scroll-indicator">
+          <span>Scroll</span>
+          <div class="line"></div>
+        </div>
       </div>
+    </div>
+
+    <section id="featured-games" class="section-wrapper">
+      <div class="section-header">
+        <h2>Featured Titles</h2>
+        <div class="divider"></div>
+      </div>
+      <FeaturedGames :games="featuredGames" />
     </section>
-  </div>
+
+    <section id="about" class="section-wrapper alt-bg">
+      <AboutSection />
+    </section>
+  </section>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
 import FeaturedGames from '@/components/FeaturedGames.vue';
+import AboutSection from '@/components/AboutSection.vue';
 
-// Assets
+// Import Assets
 import robotImg from '@/assets/RobotTycoon.webp';
 import solarImg from '@/assets/SolarSystemAdventure.webp';
 import burgerImg from '@/assets/EscapeBurtsBurgerShop.webp';
+import marsImg from '@/assets/MarsWarefareTycoon.webp';
+import animalImg from '@/assets/AnimalWorld.png';
+import chaosImg from '@/assets/ChaosPlayground.webp';
+import billionImg from '@/assets/BillionaireEmpireTycoon.webp';
+import comingSoonImg from '@/assets/ComingSoon.png';
 
 export default defineComponent({
-  components: { FeaturedGames },
+  name: 'HomePage',
+  components: {
+    FeaturedGames,
+    AboutSection,
+  },
   setup() {
-    // Only showing top 3 for the home page for a clean look
     const featuredGames = ref([
-      { id: 1, title: 'Robot Tycoon', thumbnail: robotImg, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
-      { id: 2, title: 'Solar System Adventure', thumbnail: solarImg, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
-      { id: 3, title: 'Escape Burt\'s Burger Shop!', thumbnail: burgerImg, link: 'https://www.roblox.com/games/13442533661/Escape-Burts-Burger-Shop-SCARY-OBBY' },
+      { id: 1, title: 'Robot Tycoon', description: 'Build and manage your own robot empire', thumbnail: robotImg, playerCount: 5300, playSessions: 38000000, likePercentage: 71, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
+      { id: 2, title: 'Solar System Adventure', description: 'Explore the mysteries of space', thumbnail: solarImg, playerCount: 150, playSessions: 2800000, likePercentage: 46, released: true, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
+      { id: 3, title: 'Escape Burt\'s Burger Shop!', description: 'Can you escape the infamous burger shop?', thumbnail: burgerImg, playerCount: 100, playSessions: 5300, likePercentage: 33, released: true, link: 'https://www.roblox.com/games/13442533661/Escape-Burts-Burger-Shop-SCARY-OBBY' },
+      { id: 4, title: 'Mars Warfare Tycoon', description: 'Dominate the red planet', thumbnail: marsImg, playerCount: 350, playSessions: 15033, likePercentage: 52, released: true, link: 'https://www.roblox.com/games/15024121792/Mars-Tycoon' },
+      { id: 5, title: 'Animal World 🐺', description: 'Survive and explore the forest', thumbnail: animalImg, playerCount: 400, playSessions: 339719, likePercentage: 29, released: true, link: 'https://www.roblox.com/games/17779125812/Animal-World' },
+      { id: 6, title: 'Chaos Playground', description: 'Unleash mayhem in this sandbox world', thumbnail: chaosImg, playerCount: 350, playSessions: 9900, likePercentage: 42, released: true, link: 'https://www.roblox.com/games/18502373299/Chaos-Playground' },
+      { id: 7, title: 'Billionaire Empire Tycoon', description: 'Build your business empire', thumbnail: billionImg, playerCount: 200, playSessions: 177252, likePercentage: 81, released: true, link: 'https://www.roblox.com/games/8314692489/Billionaire-Empire-Tycoon' },
+      { id: 8, title: 'My School', description: 'Create and manage your dream school', thumbnail: comingSoonImg, playerCount: 0, playSessions: 0, likePercentage: 0, released: false, link: '' },
+      { id: 9, title: 'Space Station Tycoon', description: 'Build the ultimate space station', thumbnail: comingSoonImg, playerCount: 0, playSessions: 0, likePercentage: 0, released: false, link: '' },
+      { id: 10, title: 'House Flipper', description: 'Buy, renovate and sell houses', thumbnail: comingSoonImg, playerCount: 0, playSessions: 0, likePercentage: 0, released: false, link: '' },
     ]);
 
     return { featuredGames };
@@ -75,141 +87,153 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.hero {
+.home-page {
   position: relative;
-  height: 90vh; /* Not full 100vh to show hint of content below */
+  height: 100vh;
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  flex-direction: column;
   overflow: hidden;
+  background-color: #0a0a0f;
 }
 
-.hero-bg {
+/* Subtle background, no crazy gradients */
+.background-overlay {
   position: absolute;
-  inset: 0;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at top center, #151520 0%, #0a0a0f 60%);
   z-index: 0;
 }
 
-.hero-bg img {
-  width: 100%;
+.hero-wrapper {
+  position: relative;
+  z-index: 2;
   height: 100%;
-  object-fit: cover;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(9,9,11,0.7), rgba(9,9,11,1));
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-content {
-  position: relative;
-  z-index: 1;
+  text-align: center;
   padding: 0 20px;
-  max-width: 900px;
-}
-
-.hero-logo {
-  width: 120px;
-  margin-bottom: 40px;
-  opacity: 0.9;
-}
-
-h1 {
-  font-size: clamp(3rem, 6vw, 5rem);
-  line-height: 1.1;
-  font-weight: 800;
-  margin-bottom: 40px;
-  letter-spacing: -2px;
-  text-transform: uppercase;
-}
-
-.hero-buttons {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 
-.btn {
-  padding: 14px 32px;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
+.logo-wrapper { position: relative; margin-bottom: 2rem; display: flex; justify-content: center; }
+
+.logo {
+  width: clamp(200px, 30vw, 400px);
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  animation: fadeUp 1s ease-out 0.2s forwards;
 }
 
-.btn.primary {
-  background: white;
-  color: black;
-  border: 1px solid white;
-}
-.btn.primary:hover { background: #e4e4e7; border-color: #e4e4e7; }
-
-.btn.outline {
-  background: transparent;
+.tagline {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 200;
+  line-height: 1.1;
+  margin-bottom: 3rem;
+  letter-spacing: -1px;
   color: white;
-  border: 1px solid #3f3f46;
-}
-.btn.outline:hover { border-color: white; }
-
-/* Sections */
-.section {
-  padding: 100px 40px;
+  opacity: 0;
+  animation: fadeUp 1s ease-out 0.4s forwards;
 }
 
-.section.alt-bg {
-  background: #101012;
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
+.tagline .highlight {
+  display: block;
+  font-weight: 800;
+  color: var(--primary); /* Solid color instead of gradient */
+  margin-top: 0.5rem;
 }
 
-.container {
-  max-width: var(--max-width);
+.cta-container {
+  display: flex;
+  gap: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 1s ease-out 0.6s forwards;
+}
+
+.cta-button {
+  position: relative;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-button.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.cta-button.primary:hover {
+  transform: translateY(-3px);
+  background: #0056b3;
+}
+
+.cta-button.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cta-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-3px);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeUp 1s ease-out 1s forwards;
+  z-index: 10;
+}
+
+.scroll-indicator span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
+.scroll-indicator .line { width: 1px; height: 40px; background: white; opacity: 0.5; }
+
+.section-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: 100px 20px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-header h2 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+.section-header .divider { width: 80px; height: 4px; background: var(--primary); margin: 0 auto; border-radius: 2px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.section-header h2 { font-size: 2rem; font-weight: 700; margin: 0; }
-.view-all { color: var(--text-secondary); font-size: 0.9rem; }
-.view-all:hover { color: white; }
-
-/* About Grid */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.about-text h2 { font-size: 3rem; margin-bottom: 20px; line-height: 1; }
-.about-text p { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; }
-
-.about-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-
-.stat-item {
-  border-left: 2px solid var(--border-color);
-  padding-left: 20px;
-}
-
-.stat-item h3 { font-size: 2.5rem; margin: 0; color: white; }
-.stat-item p { margin: 5px 0 0; color: var(--text-secondary); }
 
 @media (max-width: 768px) {
-  .section { padding: 60px 20px; }
-  .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero-buttons { flex-direction: column; width: 100%; }
-  .btn { width: 100%; text-align: center; }
+  .cta-container { flex-direction: column; width: 100%; max-width: 300px; }
+  .cta-button { width: 100%; }
 }
 </style>
