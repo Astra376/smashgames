@@ -1,29 +1,34 @@
 <template>
-  <div class="page-container">
-    <div class="header-spacer"></div>
-    
-    <div class="page-header">
-      <h1>OUR UNIVERSE</h1>
-    </div>
-
-    <div class="games-grid">
-      <a v-for="game in games" :key="game.id" :href="game.link || '#'" target="_blank" class="game-tile">
-        <div class="image-wrapper">
-          <img :src="game.thumbnail" :alt="game.title" loading="lazy">
-        </div>
-        <div class="tile-details">
-          <h3>{{ game.title }}</h3>
-          <span v-if="game.released" class="action">Play Now</span>
-          <span v-else class="action disabled">Coming Soon</span>
-        </div>
-      </a>
+  <div class="page-wrap">
+    <div class="spacer"></div>
+    <div class="container">
+      <h1 class="page-title">All Games</h1>
+      
+      <div class="full-grid">
+        <a 
+          v-for="game in games" 
+          :key="game.id" 
+          :href="game.released ? game.link : '#'" 
+          :class="['tile', { disabled: !game.released }]"
+          target="_blank"
+        >
+          <div class="tile-img">
+            <img :src="game.thumbnail" :alt="game.title" loading="lazy" />
+            <div class="tile-overlay" v-if="!game.released">
+              <span>Coming Soon</span>
+            </div>
+          </div>
+          <div class="tile-info">
+            <h3>{{ game.title }}</h3>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
-// Asset imports
 import robotImg from '@/assets/RobotTycoon.webp';
 import solarImg from '@/assets/SolarSystemAdventure.webp';
 import marsImg from '@/assets/MarsWarefareTycoon.webp';
@@ -34,7 +39,6 @@ import burgerImg from '@/assets/EscapeBurtsBurgerShop.webp';
 import comingSoonImg from '@/assets/ComingSoon.png';
 
 export default defineComponent({
-  name: 'GamesPage',
   setup() {
     const games = ref([
       { id: 1, title: 'Robot Tycoon', thumbnail: robotImg, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
@@ -54,58 +58,66 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.page-container {
-  min-height: 100vh;
-  padding: 0 40px 100px;
-  max-width: 1600px;
-  margin: 0 auto;
-}
-.header-spacer { height: 120px; }
+.page-wrap { min-height: 100vh; padding-bottom: 80px; }
+.spacer { height: 120px; }
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 40px; }
 
-.page-header { margin-bottom: 60px; }
-.page-header h1 { font-size: 3rem; font-weight: 800; text-transform: uppercase; margin: 0; }
-
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 40px 30px;
-  width: 100%;
-}
-
-.game-tile {
-  text-decoration: none;
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 40px;
   color: white;
-  display: flex;
-  flex-direction: column;
 }
 
-.image-wrapper {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: #111;
+.full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.tile {
+  display: block;
+  text-decoration: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 15px;
+  transition: 0.2s;
 }
 
-.image-wrapper img {
+.tile:not(.disabled):hover {
+  border-color: #555;
+  transform: translateY(-2px);
+}
+
+.tile-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #222;
+}
+
+.tile-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.3s;
 }
 
-.game-tile:hover .image-wrapper img { opacity: 0.8; }
+.tile-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #ccc;
+}
 
-.tile-details { display: flex; justify-content: space-between; align-items: center; }
-
-.tile-details h3 { font-size: 1.2rem; font-weight: 600; margin: 0; }
-
-.action { font-size: 0.9rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-.action.disabled { opacity: 0.5; }
+.tile-info { padding: 15px; }
+.tile-info h3 { margin: 0; font-size: 1rem; color: white; font-weight: 500; }
 
 @media (max-width: 768px) {
-  .page-container { padding: 0 20px 60px; }
-  .games-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 20px; }
 }
 </style>
