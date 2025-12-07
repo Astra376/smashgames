@@ -27,11 +27,6 @@
             </router-link>
           </div>
         </div>
-
-        <div class="scroll-indicator">
-          <span>Scroll</span>
-          <div class="line"></div>
-        </div>
       </div>
     </div>
 
@@ -233,28 +228,6 @@ export default defineComponent({
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-3px);
 }
-
-.scroll-indicator {
-  /* Removed absolute positioning for perfect flex alignment */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  animation: fadeUp 1s ease-out 1s forwards;
-  z-index: 10;
-  padding-bottom: 30px; /* Keeps it pinned to bottom via flex layout */
-}
-
-.scroll-indicator span { 
-  font-size: 0.8rem; 
-  text-transform: uppercase; 
-  letter-spacing: 2px; 
-  opacity: 0.7;
-  padding-left: 2px; /* Offsets the trailing letter-spacing for perfect centering */
-}
-
-.scroll-indicator .line { width: 1px; height: 40px; background: linear-gradient(to bottom, #fff, transparent); }
 
 .section-wrapper {
   position: relative;
