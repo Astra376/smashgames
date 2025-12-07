@@ -1,14 +1,18 @@
 <template>
   <div id="app" class="app">
-    <header class="header" :class="{ 'header-scrolled': isScrolled || isMobileMenuOpen }">
+    <header class="header" :class="{ 'header-visible': isScrolled || isMobileMenuOpen }">
       <div class="header-content">
         <router-link to="/" class="logo" @click="closeMobileMenu">
           <img src="@/assets/logo 2.png" alt="Smash Games" class="logo-img" />
-          <span class="logo-text">Smash Games</span>
+          <span class="logo-text">SMASH GAMES</span>
         </router-link>
         
         <button class="mobile-menu-btn" @click="toggleMobileMenu" aria-label="Toggle menu">
-          <span class="menu-icon" :class="{ 'open': isMobileMenuOpen }"></span>
+          <div class="hamburger" :class="{ 'active': isMobileMenuOpen }">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </button>
 
         <nav class="nav" :class="{ 'nav-open': isMobileMenuOpen }">
@@ -18,33 +22,26 @@
             <router-link to="/company" class="nav-link" @click="closeMobileMenu">Company</router-link>
             <router-link to="/careers" class="nav-link" @click="closeMobileMenu">Careers</router-link>
           </div>
-          <router-link to="/contact" class="nav-link standout" @click="closeMobileMenu">Contact Us</router-link>
+          <router-link to="/contact" class="nav-button" @click="closeMobileMenu">Contact</router-link>
         </nav>
       </div>
     </header>
 
     <main class="main-content">
-      <router-view v-slot="{ Component }">
-        <transition name="page-fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <router-view />
     </main>
 
     <footer class="footer">
       <div class="footer-content">
-        <div class="footer-brand">
+        <div class="footer-left">
           <img src="@/assets/logo.png" alt="Logo" class="footer-logo"/>
-          <p>Breaking barriers. Smashing expectations.</p>
+          <p>© 2024 Smash Games.</p>
         </div>
         <div class="social-links">
           <a href="#" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
           <a href="#" target="_blank" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
           <a href="#" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
           <a href="https://www.roblox.com/groups/8338753/Smash-Games" target="_blank" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
-        </div>
-        <div class="copyright">
-          <p>© 2024 Smash Games. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -62,7 +59,7 @@ export default defineComponent({
     const isMobileMenuOpen = ref(false);
 
     const handleScroll = () => {
-      isScrolled.value = window.scrollY > 20;
+      isScrolled.value = window.scrollY > 50;
     };
 
     const toggleMobileMenu = () => {
@@ -91,57 +88,47 @@ export default defineComponent({
 </script>
 
 <style>
-/* --- GLOBAL VARIABLES --- */
+/* --- RESET & VARIABLES --- */
 :root {
-  --primary: #007bff;
-  --primary-hover: #0056b3;
-  --primary-glow: rgba(0, 123, 255, 0.4);
-  --bg-dark: #0a0a0f;
-  --bg-darker: #050508;
-  --bg-card: rgba(255, 255, 255, 0.03);
-  --bg-card-hover: rgba(255, 255, 255, 0.06);
-  --text-main: #ffffff;
-  --text-muted: #a0a0a0;
-  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --bg-color: #050505;
+  --bg-card: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #888888;
+  --accent-color: #0066ff;
+  --accent-hover: #0052cc;
   --font-main: "Kanit", sans-serif;
   --nav-height: 80px;
 }
 
-/* --- RESET & BASE --- */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
   font-family: var(--font-main);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* --- HEADER --- */
 .header {
   position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
+  top: 0; left: 0; width: 100%;
   height: var(--nav-height);
-  transition: all 0.3s ease;
-  border-bottom: 1px solid transparent;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
-.header-scrolled {
-  background: rgba(10, 10, 15, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: var(--glass-border);
-  height: 70px;
+.header-visible {
+  background-color: rgba(5, 5, 5, 0.95);
+  border-bottom: 1px solid #222;
 }
 
 .header-content {
-  max-width: 1600px; /* Wider container for header */
+  max-width: 1400px;
   height: 100%;
   margin: 0 auto;
   padding: 0 2rem;
@@ -157,122 +144,86 @@ body {
   text-decoration: none;
   color: white;
   z-index: 1002;
-  flex-shrink: 0; /* Prevent logo shrinking */
 }
 
-.logo-img { height: 40px; width: auto; }
-.logo-text { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; text-transform: uppercase; white-space: nowrap; }
+.logo-img { height: 32px; width: auto; }
+.logo-text { font-weight: 700; font-size: 1.2rem; letter-spacing: 1px; }
 
-/* --- NAVIGATION --- */
-.nav { display: flex; align-items: center; gap: 3rem; } /* Increased gap */
-
-.nav-links-wrapper {
-  display: flex;
-  gap: 2.5rem; /* Space between links */
-}
+/* --- NAV --- */
+.nav { display: flex; align-items: center; gap: 3rem; }
+.nav-links-wrapper { display: flex; gap: 2rem; }
 
 .nav-link {
   text-decoration: none;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: color 0.3s;
-  position: relative;
-  white-space: nowrap; /* Prevent squishing */
+  transition: color 0.2s;
+  white-space: nowrap;
 }
 
-.nav-link:not(.standout):hover, 
-.nav-link:not(.standout).router-link-active { 
-  color: var(--text-main); 
-}
+.nav-link:hover, .nav-link.router-link-active { color: var(--text-primary); }
 
-.nav-link:not(.standout)::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0; width: 0%; height: 2px;
-  background: var(--primary);
-  transition: width 0.3s ease;
-}
-
-.nav-link:not(.standout):hover::after,
-.nav-link:not(.standout).router-link-active::after {
-  width: 100%;
-}
-
-.nav-link.standout {
-  padding: 0.6rem 1.8rem;
-  background: var(--primary);
-  color: white;
-  border-radius: 50px;
+.nav-button {
+  background: white;
+  color: black;
+  padding: 0.5rem 1.5rem;
   font-weight: 600;
-  box-shadow: 0 0 15px var(--primary-glow);
-  transition: all 0.3s;
+  text-decoration: none;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  transition: background 0.2s;
 }
 
-.nav-link.standout:hover {
-  transform: translateY(-2px);
-  background: var(--primary-hover);
-  box-shadow: 0 0 25px var(--primary-glow);
-}
+.nav-button:hover { background: #ddd; }
 
-/* --- MOBILE MENU --- */
-.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 10px; z-index: 1002; }
-.menu-icon { display: block; width: 28px; height: 2px; background: white; position: relative; transition: 0.3s; }
-.menu-icon::before, .menu-icon::after { content: ''; position: absolute; width: 100%; height: 2px; background: white; transition: 0.3s; }
-.menu-icon::before { top: -8px; }
-.menu-icon::after { top: 8px; }
-
-.menu-icon.open { background: transparent; }
-.menu-icon.open::before { top: 0; transform: rotate(45deg); }
-.menu-icon.open::after { top: 0; transform: rotate(-45deg); }
-
-/* --- MAIN CONTENT --- */
-.main-content { min-height: 100vh; display: flex; flex-direction: column; }
-
-.page-fade-enter-active, .page-fade-leave-active { transition: opacity 0.4s ease, transform 0.4s ease; }
-.page-fade-enter-from, .page-fade-leave-to { opacity: 0; transform: translateY(10px); }
+/* --- MOBILE --- */
+.mobile-menu-btn { display: none; background: none; border: none; padding: 10px; cursor: pointer; z-index: 1002; }
+.hamburger span { display: block; width: 24px; height: 2px; background: white; margin: 5px 0; transition: 0.3s; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
 /* --- FOOTER --- */
 .footer {
-  background: var(--bg-darker);
-  border-top: var(--glass-border);
-  padding: 4rem 2rem 2rem;
-  text-align: center;
+  border-top: 1px solid #222;
+  padding: 3rem 2rem;
+  background: var(--bg-color);
 }
 
-.footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-.footer-logo { height: 50px; margin-bottom: 1rem; opacity: 0.8; }
-.footer-brand p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
-
-.social-links { display: flex; gap: 2rem; margin: 1rem 0; }
-.social-links a { color: var(--text-muted); font-size: 1.5rem; transition: 0.3s; }
-.social-links a:hover { color: var(--primary); transform: translateY(-3px); }
-
-.copyright p { color: #444; font-size: 0.8rem; margin: 0; }
-
-/* --- MEDIA QUERIES --- */
-@media (max-width: 1024px) {
-  .nav { gap: 1.5rem; }
-  .nav-links-wrapper { gap: 1.5rem; }
+.footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.footer-left { display: flex; align-items: center; gap: 1rem; }
+.footer-logo { height: 30px; opacity: 0.5; }
+.footer p { color: #444; font-size: 0.9rem; margin: 0; }
+
+.social-links { display: flex; gap: 1.5rem; }
+.social-links a { color: #444; font-size: 1.2rem; transition: 0.2s; }
+.social-links a:hover { color: white; }
 
 @media (max-width: 768px) {
   .mobile-menu-btn { display: block; }
-  
   .nav {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-    background: #0a0a0f;
+    background: var(--bg-color);
     flex-direction: column; justify-content: center;
-    padding: 2rem;
-    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    transform: translateX(100%); transition: transform 0.3s ease;
     z-index: 1001;
   }
-  .nav.nav-open { transform: translateX(0); }
-  
-  .nav-links-wrapper { display: flex; flex-direction: column; gap: 2rem; align-items: center; margin-bottom: 2rem; width: 100%; }
+  .nav-open { transform: translateX(0); }
+  .nav-links-wrapper { flex-direction: column; align-items: center; gap: 2rem; margin-bottom: 2rem; }
   .nav-link { font-size: 1.5rem; }
-  .nav-link.standout { width: 100%; text-align: center; max-width: 300px; }
+  
+  .footer-content { flex-direction: column; gap: 2rem; }
 }
 </style>

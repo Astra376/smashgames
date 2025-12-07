@@ -2,38 +2,21 @@
   <div class="page-container">
     <div class="header-spacer"></div>
     
-    <div class="games-hero">
-      <h1>Our <span class="highlight">Universe</span></h1>
-      <p>Explore worlds where imagination meets adrenaline.</p>
+    <div class="page-header">
+      <h1>OUR UNIVERSE</h1>
     </div>
 
     <div class="games-grid">
-      <div v-for="game in games" :key="game.id" class="game-card">
+      <a v-for="game in games" :key="game.id" :href="game.link || '#'" target="_blank" class="game-tile">
         <div class="image-wrapper">
           <img :src="game.thumbnail" :alt="game.title" loading="lazy">
-          <div class="overlay">
-            <a v-if="game.released" :href="game.link" target="_blank" class="play-btn">
-              <i class="fas fa-gamepad"></i> Play
-            </a>
-            <span v-else class="status-badge">Coming Soon</span>
-          </div>
         </div>
-        <div class="card-body">
-          <div class="card-header">
-            <h3>{{ game.title }}</h3>
-            <span v-if="game.released" class="live-indicator">Live</span>
-          </div>
-          <p class="desc">{{ game.description }}</p>
-          <div class="card-footer" v-if="game.released">
-            <div class="stat" title="Active Players">
-              <i class="fas fa-user"></i> {{ formatNumber(game.playerCount) }}
-            </div>
-            <div class="stat" title="Likes">
-              <i class="fas fa-thumbs-up"></i> {{ game.likePercentage }}%
-            </div>
-          </div>
+        <div class="tile-details">
+          <h3>{{ game.title }}</h3>
+          <span v-if="game.released" class="action">Play Now</span>
+          <span v-else class="action disabled">Coming Soon</span>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </template>
@@ -54,22 +37,18 @@ export default defineComponent({
   name: 'GamesPage',
   setup() {
     const games = ref([
-      { id: 1, title: 'Robot Tycoon', description: 'Build and manage your own robot empire', thumbnail: robotImg, playerCount: 5300, likePercentage: 71, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
-      { id: 7, title: 'Billionaire Empire', description: 'Build your business empire', thumbnail: billionImg, playerCount: 200, likePercentage: 81, released: true, link: 'https://www.roblox.com/games/8314692489/Billionaire-Empire-Tycoon' },
-      { id: 4, title: 'Mars Warfare', description: 'Dominate the red planet', thumbnail: marsImg, playerCount: 350, likePercentage: 52, released: true, link: 'https://www.roblox.com/games/15024121792/Mars-Tycoon' },
-      { id: 6, title: 'Chaos Playground', description: 'Unleash mayhem in this sandbox', thumbnail: chaosImg, playerCount: 350, likePercentage: 42, released: true, link: 'https://www.roblox.com/games/18502373299/Chaos-Playground' },
-      { id: 2, title: 'Solar System', description: 'Explore the mysteries of space', thumbnail: solarImg, playerCount: 150, likePercentage: 46, released: true, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
-      { id: 3, title: 'Escape Burt\'s', description: 'Can you escape the burger shop?', thumbnail: burgerImg, playerCount: 100, likePercentage: 33, released: true, link: 'https://www.roblox.com/games/13442533661/Escape-Burts-Burger-Shop-SCARY-OBBY' },
-      { id: 5, title: 'Animal World', description: 'Survive and explore the forest', thumbnail: animalImg, playerCount: 400, likePercentage: 29, released: true, link: 'https://www.roblox.com/games/17779125812/Animal-World' },
-      { id: 8, title: 'My School', description: 'Create your dream school', thumbnail: comingSoonImg, playerCount: 0, released: false },
-      { id: 9, title: 'Space Station', description: 'Build the ultimate station', thumbnail: comingSoonImg, playerCount: 0, released: false },
+      { id: 1, title: 'Robot Tycoon', thumbnail: robotImg, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
+      { id: 7, title: 'Billionaire Empire', thumbnail: billionImg, released: true, link: 'https://www.roblox.com/games/8314692489/Billionaire-Empire-Tycoon' },
+      { id: 4, title: 'Mars Warfare', thumbnail: marsImg, released: true, link: 'https://www.roblox.com/games/15024121792/Mars-Tycoon' },
+      { id: 6, title: 'Chaos Playground', thumbnail: chaosImg, released: true, link: 'https://www.roblox.com/games/18502373299/Chaos-Playground' },
+      { id: 2, title: 'Solar System', thumbnail: solarImg, released: true, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
+      { id: 3, title: 'Escape Burt\'s', thumbnail: burgerImg, released: true, link: 'https://www.roblox.com/games/13442533661/Escape-Burts-Burger-Shop-SCARY-OBBY' },
+      { id: 5, title: 'Animal World', thumbnail: animalImg, released: true, link: 'https://www.roblox.com/games/17779125812/Animal-World' },
+      { id: 8, title: 'My School', thumbnail: comingSoonImg, released: false },
+      { id: 9, title: 'Space Station', thumbnail: comingSoonImg, released: false },
     ]);
 
-    const formatNumber = (num) => {
-      return num > 999 ? (num/1000).toFixed(1) + 'k' : num;
-    };
-
-    return { games, formatNumber };
+    return { games };
   }
 });
 </script>
@@ -78,91 +57,55 @@ export default defineComponent({
 .page-container {
   min-height: 100vh;
   padding: 0 40px 100px;
-  max-width: 1600px; /* Wider container */
+  max-width: 1600px;
   margin: 0 auto;
 }
 .header-spacer { height: 120px; }
 
-.games-hero { text-align: center; margin-bottom: 60px; }
-.games-hero h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; }
-.games-hero p { color: var(--text-muted); font-size: 1.2rem; }
-.highlight { color: var(--primary); }
+.page-header { margin-bottom: 60px; }
+.page-header h1 { font-size: 3rem; font-weight: 800; text-transform: uppercase; margin: 0; }
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Optimized grid width */
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 40px 30px;
   width: 100%;
 }
 
-.game-card {
-  background: var(--bg-card);
-  border: var(--glass-border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: 0.3s ease;
+.game-tile {
+  text-decoration: none;
+  color: white;
   display: flex;
   flex-direction: column;
 }
 
-.game-card:hover {
-  transform: translateY(-8px);
-  background: var(--bg-card-hover);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
 .image-wrapper {
-  position: relative;
   width: 100%;
-  padding-top: 56.25%;
+  aspect-ratio: 16/9;
+  background: #111;
+  border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 15px;
 }
 
 .image-wrapper img {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  transition: 0.5s ease;
+  transition: opacity 0.3s;
 }
 
-.game-card:hover .image-wrapper img { transform: scale(1.1); }
+.game-tile:hover .image-wrapper img { opacity: 0.8; }
 
-.overlay {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: 0.3s;
+.tile-details { display: flex; justify-content: space-between; align-items: center; }
+
+.tile-details h3 { font-size: 1.2rem; font-weight: 600; margin: 0; }
+
+.action { font-size: 0.9rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.action.disabled { opacity: 0.5; }
+
+@media (max-width: 768px) {
+  .page-container { padding: 0 20px 60px; }
+  .games-grid { grid-template-columns: 1fr; }
 }
-.game-card:hover .overlay { opacity: 1; }
-
-.play-btn {
-  padding: 10px 25px;
-  background: var(--primary);
-  color: white;
-  text-decoration: none;
-  border-radius: 20px;
-  font-weight: bold;
-  display: flex; align-items: center; gap: 8px;
-}
-.play-btn:hover { background: var(--primary-hover); }
-
-.status-badge {
-  background: rgba(255,255,255,0.1);
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  backdrop-filter: blur(5px);
-}
-
-.card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-
-.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.card-header h3 { margin: 0; font-size: 1.3rem; color: white; }
-.live-indicator { font-size: 0.7rem; color: #4ade80; background: rgba(74, 222, 128, 0.1); padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(74, 222, 128, 0.2); }
-
-.desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; }
-
-.card-footer { display: flex; gap: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; color: #888; font-size: 0.85rem; }
-.stat { display: flex; align-items: center; gap: 5px; }
-.stat i { color: var(--primary); }
 </style>

@@ -1,33 +1,20 @@
 <template>
   <div class="about-container">
-    <div class="about-header">
-      <h2>Creating Incredible</h2>
-      <p>Our mission is to build the best experiences on the platform.</p>
+    <div class="about-left">
+      <h2>Creating Incredible.</h2>
     </div>
-    
-    <div class="features-grid">
-      <div class="feature-item">
-        <div class="icon-wrapper">
-          <img src="@/assets/create.png" alt="Publish" />
-        </div>
+    <div class="about-right">
+      <div class="text-block">
         <h3>Publish</h3>
-        <p>We move fast. Every hour is harnessed to its full potential to ship updates faster than anyone else.</p>
+        <p>We move fast. Every hour is harnessed to its full potential to ship updates faster than anyone else in the industry.</p>
       </div>
-
-      <div class="feature-item">
-        <div class="icon-wrapper">
-          <img src="@/assets/learn.png" alt="Learn" />
-        </div>
+      <div class="text-block">
         <h3>Learn</h3>
         <p>Data drives us. Every success and failure is a lesson that improves our workflow and game quality.</p>
       </div>
-
-      <div class="feature-item">
-        <div class="icon-wrapper">
-          <img src="@/assets/repeat.png" alt="Repeat" />
-        </div>
+      <div class="text-block">
         <h3>Repeat</h3>
-        <p>Consistency is key. What takes other studios months takes us weeks. Always better than the last.</p>
+        <p>Consistency is key. What takes other studios months takes us weeks. We ensure every game is better than the last.</p>
       </div>
     </div>
   </div>
@@ -39,37 +26,45 @@ export default defineComponent({ name: 'AboutSection' });
 </script>
 
 <style scoped>
-.about-container { text-align: center; }
-
-.about-header h2 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 700; }
-.about-header p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-.features-grid {
+.about-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
+  grid-template-columns: 1fr 2fr;
+  gap: 60px;
+  padding: 40px 0;
+  border-top: 1px solid #222;
 }
 
-.feature-item {
-  background: var(--bg-card);
-  padding: 40px 30px;
-  border-radius: 16px;
-  border: var(--glass-border);
-  transition: 0.3s;
+.about-left h2 {
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  position: sticky;
+  top: 100px;
 }
 
-.feature-item:hover { transform: translateY(-10px); background: var(--bg-card-hover); border-color: var(--primary); }
-
-.icon-wrapper {
-  width: 80px; height: 80px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 25px;
+.about-right {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
 }
 
-.icon-wrapper img { width: 40px; height: 40px; filter: invert(1); opacity: 0.9; }
+.text-block h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: white;
+}
 
-.feature-item h3 { font-size: 1.5rem; margin-bottom: 15px; }
-.feature-item p { color: var(--text-muted); line-height: 1.6; }
+.text-block p {
+  color: #888;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .about-container { grid-template-columns: 1fr; gap: 40px; }
+  .about-left h2 { position: static; font-size: 2.5rem; }
+}
 </style>
