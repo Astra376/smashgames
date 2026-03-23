@@ -43,7 +43,7 @@
           <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
           <a href="#" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
         </div>
-        <p class="copyright">© 2024 Smash Games. All rights reserved.</p>
+        <p class="copyright">© 2025 Smash Games. All rights reserved.</p>
       </div>
     </footer>
   </div>
