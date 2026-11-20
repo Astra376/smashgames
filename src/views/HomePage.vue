@@ -27,12 +27,17 @@
       </div>
     </div>
 
+    <section id="live-stats" class="section-wrapper stats-section">
+      <StatsBar />
+    </section>
+
     <section id="featured-games" class="section-wrapper">
       <div class="section-header">
         <h2>Featured Titles</h2>
         <div class="divider"></div>
       </div>
-      <FeaturedGames :games="featuredGames" />
+      <FeaturedGames v-if="featuredGames.length" :games="featuredGames" />
+      <LoadingSpinner v-else />
     </section>
 
     <section id="about" class="section-wrapper alt-bg">
@@ -42,39 +47,41 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, computed } from 'vue';
 import FeaturedGames from '@/components/FeaturedGames.vue';
 import AboutSection from '@/components/AboutSection.vue';
+import StatsBar from '@/components/StatsBar.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import { useRobloxStats, formatCompact, formatNumber } from '@/composables/useRobloxStats';
 
-// Import Assets
-import robotImg from '@/assets/RobotTycoon.webp';
-import solarImg from '@/assets/SolarSystemAdventure.webp';
-import burgerImg from '@/assets/EscapeBurtsBurgerShop.webp';
-import marsImg from '@/assets/MarsWarefareTycoon.webp';
-import animalImg from '@/assets/AnimalWorld.png';
-import chaosImg from '@/assets/ChaosPlayground.webp';
-import billionImg from '@/assets/BillionaireEmpireTycoon.webp';
-import comingSoonImg from '@/assets/ComingSoon.png';
+const FEATURED_COUNT = 10;
 
 export default defineComponent({
   name: 'HomePage',
   components: {
     FeaturedGames,
     AboutSection,
+    StatsBar,
+    LoadingSpinner,
   },
   setup() {
-    const featuredGames = ref([
-      { id: 1, title: 'Robot Tycoon', description: 'Build and manage your own robot empire', thumbnail: robotImg, playerCount: 5300, playSessions: 38000000, likePercentage: 71, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
-      { id: 2, title: 'Solar System Adventure', description: 'Explore the mysteries of space', thumbnail: solarImg, playerCount: 150, playSessions: 2800000, likePercentage: 46, released: true, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
-      { id: 3, title: 'Escape Burt\'s Burger Shop!', description: 'Can you escape the infamous burger shop?', thumbnail: burgerImg, playerCount: 100, playSessions: 5300, likePercentage: 33, released: true, link: 'https://www.roblox.com/games/13442533661/Escape-Burts-Burger-Shop-SCARY-OBBY' },
-      { id: 4, title: 'Mars Warfare Tycoon', description: 'Dominate the red planet', thumbnail: marsImg, playerCount: 350, playSessions: 15033, likePercentage: 52, released: true, link: 'https://www.roblox.com/games/15024121792/Mars-Tycoon' },
-      { id: 5, title: 'Animal World 🐺', description: 'Survive and explore the forest', thumbnail: animalImg, playerCount: 400, playSessions: 339719, likePercentage: 29, released: true, link: 'https://www.roblox.com/games/17779125812/Animal-World' },
-      { id: 6, title: 'Chaos Playground', description: 'Unleash mayhem in this sandbox world', thumbnail: chaosImg, playerCount: 350, playSessions: 9900, likePercentage: 42, released: true, link: 'https://www.roblox.com/games/18502373299/Chaos-Playground' },
-      { id: 7, title: 'Billionaire Empire Tycoon', description: 'Build your business empire', thumbnail: billionImg, playerCount: 200, playSessions: 177252, likePercentage: 81, released: true, link: 'https://www.roblox.com/games/8314692489/Billionaire-Empire-Tycoon' },
-      { id: 8, title: 'My School', description: 'Create and manage your dream school', thumbnail: comingSoonImg, playerCount: 0, playSessions: 0, likePercentage: 0, released: false, link: '' },
-      { id: 9, title: 'Space Station Tycoon', description: 'Build the ultimate space station', thumbnail: comingSoonImg, playerCount: 0, playSessions: 0, likePercentage: 0, released: false, link: '' },
-      { id: 10, title: 'House Flipper', description: 'Buy, renovate and sell houses', thumbnail: comingSoonImg, playerCount: 0, playSessions: 0, likePercentage: 0, released: false, link: '' },
-    ]);
+    const { stats } = useRobloxStats();
+
+    // Top games by visits, shaped for the carousel.
+    const featuredGames = computed(() =>
+      [...(stats.value?.games || [])]
+        .filter((g) => g.thumbnail)
+        .sort((a, b) => b.visits - a.visits)
+        .slice(0, FEATURED_COUNT)
+        .map((g) => ({
+          id: g.universeId,
+          title: g.name,
+          description: `${formatNumber(g.playing)} playing · ${formatCompact(g.visits)} visits`,
+          thumbnail: g.thumbnail,
+          released: true,
+          link: g.url,
+        }))
+    );
 
     return { featuredGames };
   }
@@ -199,6 +206,8 @@ export default defineComponent({
   max-width: 1400px;
   margin: 0 auto;
 }
+
+.stats-section { padding-top: 60px; padding-bottom: 20px; }
 
 .section-header { text-align: center; margin-bottom: 60px; }
 .section-header h2 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: white; }

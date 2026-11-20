@@ -1,28 +1,37 @@
 <template>
   <div class="page-container">
     <div class="header-spacer"></div>
-    
+
     <div class="games-hero">
       <h1>Our <span class="highlight">Universe</span></h1>
       <p>Explore worlds where imagination meets adrenaline.</p>
     </div>
 
-    <div class="games-grid">
-      <div v-for="game in games" :key="game.id" class="game-card">
+    <StatsBar class="games-stats" />
+
+    <LoadingSpinner v-if="loading && !stats" />
+    <ErrorMessage v-else-if="error && !stats" :message="`Couldn't load games: ${error}`" />
+
+    <div v-else-if="stats" class="games-grid">
+      <div v-for="game in stats.games" :key="game.universeId" class="game-card">
         <div class="image-wrapper">
-          <img :src="game.thumbnail" :alt="game.title" loading="lazy">
+          <img v-if="game.thumbnail" :src="game.thumbnail" :alt="game.name" loading="lazy">
+          <span v-if="game.playing > 0" class="live-badge"><span class="dot"></span>{{ formatNumber(game.playing) }} playing</span>
           <div class="overlay">
-            <a v-if="game.released" :href="game.link" target="_blank" class="play-btn">
+            <a :href="game.url" target="_blank" rel="noopener" class="play-btn">
               <i class="fas fa-gamepad"></i> Play
             </a>
-            <span v-else class="status-badge">Coming Soon</span>
           </div>
         </div>
         <div class="card-body">
           <div class="card-header">
-            <h3>{{ game.title }}</h3>
+            <h3>{{ game.name }}</h3>
           </div>
-          <p class="desc">{{ game.description }}</p>
+          <p class="owner">by {{ game.owner.name }}</p>
+          <div class="game-stats">
+            <span><i class="fas fa-user"></i> {{ formatNumber(game.playing) }}</span>
+            <span><i class="fas fa-eye"></i> {{ formatCompact(game.visits) }} visits</span>
+          </div>
         </div>
       </div>
     </div>
@@ -30,33 +39,18 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-// Asset imports
-import robotImg from '@/assets/RobotTycoon.webp';
-import solarImg from '@/assets/SolarSystemAdventure.webp';
-import marsImg from '@/assets/MarsWarefareTycoon.webp';
-import chaosImg from '@/assets/ChaosPlayground.webp';
-import billionImg from '@/assets/BillionaireEmpireTycoon.webp';
-import animalImg from '@/assets/AnimalWorld.png';
-import burgerImg from '@/assets/EscapeBurtsBurgerShop.webp';
-import comingSoonImg from '@/assets/ComingSoon.png';
+import { defineComponent } from 'vue';
+import StatsBar from '@/components/StatsBar.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import ErrorMessage from '@/components/ErrorMessage.vue';
+import { useRobloxStats, formatCompact, formatNumber } from '@/composables/useRobloxStats';
 
 export default defineComponent({
   name: 'GamesPage',
+  components: { StatsBar, LoadingSpinner, ErrorMessage },
   setup() {
-    const games = ref([
-      { id: 1, title: 'Robot Tycoon', description: 'Build and manage your own robot empire', thumbnail: robotImg, released: true, link: 'https://www.roblox.com/games/10828925984/Robot-Tycoon' },
-      { id: 7, title: 'Billionaire Empire', description: 'Build your business empire', thumbnail: billionImg, released: true, link: 'https://www.roblox.com/games/8314692489/Billionaire-Empire-Tycoon' },
-      { id: 4, title: 'Mars Warfare', description: 'Dominate the red planet', thumbnail: marsImg, released: true, link: 'https://www.roblox.com/games/15024121792/Mars-Tycoon' },
-      { id: 6, title: 'Chaos Playground', description: 'Unleash mayhem in this sandbox', thumbnail: chaosImg, released: true, link: 'https://www.roblox.com/games/18502373299/Chaos-Playground' },
-      { id: 2, title: 'Solar System', description: 'Explore the mysteries of space', thumbnail: solarImg, released: true, link: 'https://www.roblox.com/games/5376454753/Solar-System-Adventure' },
-      { id: 3, title: 'Escape Burt\'s', description: 'Can you escape the burger shop?', thumbnail: burgerImg, released: true, link: 'https://www.roblox.com/games/13442533661/Escape-Burts-Burger-Shop-SCARY-OBBY' },
-      { id: 5, title: 'Animal World', description: 'Survive and explore the forest', thumbnail: animalImg, released: true, link: 'https://www.roblox.com/games/17779125812/Animal-World' },
-      { id: 8, title: 'My School', description: 'Create your dream school', thumbnail: comingSoonImg, released: false },
-      { id: 9, title: 'Space Station', description: 'Build the ultimate station', thumbnail: comingSoonImg, released: false },
-    ]);
-
-    return { games };
+    const { stats, error, loading } = useRobloxStats();
+    return { stats, error, loading, formatCompact, formatNumber };
   }
 });
 </script>
@@ -145,5 +139,21 @@ export default defineComponent({
 .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .card-header h3 { margin: 0; font-size: 1.3rem; color: white; }
 
-.desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0; flex-grow: 1; }
+
+.games-stats { margin-bottom: 60px; }
+
+.image-wrapper { background: #0f0f14; }
+
+.live-badge {
+  position: absolute; top: 12px; left: 12px; z-index: 1;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,0.75);
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 0.8rem; font-weight: 600; color: white;
+}
+.live-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+
+.owner { color: var(--text-muted); font-size: 0.85rem; margin: 0 0 12px; }
+.game-stats { display: flex; gap: 18px; color: var(--text-muted); font-size: 0.9rem; margin-top: auto; }
+.game-stats i { margin-right: 4px; }
 </style>

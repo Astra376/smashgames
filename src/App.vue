@@ -39,9 +39,9 @@
         </div>
         <div class="social-links">
           <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
-          <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="#" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
+          <a href="https://x.com/PlaySmashGames" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://www.youtube.com/@SmashGamesOfficial" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.roblox.com/communities/8338753" target="_blank" rel="noopener" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
         </div>
         <p class="copyright">© 2024 Smash Games. All rights reserved.</p>
       </div>

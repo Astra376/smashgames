@@ -22,9 +22,13 @@
               <div class="icon-box"><i class="fab fa-discord"></i></div>
               <span>Join our Discord</span>
             </a>
-            <a href="#" class="contact-link">
-              <div class="icon-box"><i class="fab fa-twitter"></i></div>
-              <span>@SmashGames</span>
+            <a href="https://x.com/PlaySmashGames" target="_blank" rel="noopener" class="contact-link">
+              <div class="icon-box"><i class="fa-brands fa-x-twitter"></i></div>
+              <span>@PlaySmashGames</span>
+            </a>
+            <a href="https://www.youtube.com/@SmashGamesOfficial" target="_blank" rel="noopener" class="contact-link">
+              <div class="icon-box"><i class="fab fa-youtube"></i></div>
+              <span>@SmashGamesOfficial</span>
             </a>
           </div>
         </div>
