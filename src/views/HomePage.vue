@@ -37,6 +37,7 @@
         <div class="divider"></div>
       </div>
       <FeaturedGames v-if="featuredGames.length" :games="featuredGames" />
+      <ErrorMessage v-else-if="error" :message="`Couldn't load games: ${error}`" />
       <LoadingSpinner v-else />
     </section>
 
@@ -52,6 +53,7 @@ import FeaturedGames from '@/components/FeaturedGames.vue';
 import AboutSection from '@/components/AboutSection.vue';
 import StatsBar from '@/components/StatsBar.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import ErrorMessage from '@/components/ErrorMessage.vue';
 import { useRobloxStats, formatCompact, formatNumber } from '@/composables/useRobloxStats';
 
 const FEATURED_COUNT = 10;
@@ -63,9 +65,10 @@ export default defineComponent({
     AboutSection,
     StatsBar,
     LoadingSpinner,
+    ErrorMessage,
   },
   setup() {
-    const { stats } = useRobloxStats();
+    const { stats, error } = useRobloxStats();
 
     // Top games by visits, shaped for the carousel.
     const featuredGames = computed(() =>
@@ -83,7 +86,7 @@ export default defineComponent({
         }))
     );
 
-    return { featuredGames };
+    return { featuredGames, error };
   }
 });
 </script>

@@ -1,10 +1,18 @@
-// Collects every public game owned by a Roblox user and by every group that user owns,
-// then totals live players (CCU) and visits. Runs in Cloudflare Pages Functions and Node 18+.
+// Roblox data for the Smash Games site. Runs in Cloudflare Pages Functions and Node 18+.
+//
+// discoverGames(): slow (~40 requests) — finds every group the user owns and every public game
+//   owned by the user or those groups, with names and thumbnails. Run rarely and store the result.
+// fetchLiveCounts(): fast (1 request per 50 games) — current players and visits for known games.
+
+const REQUEST_TIMEOUT_MS = 8000;
 
 async function getJson(url, attempt = 0) {
-  const res = await fetch(url, { headers: { accept: 'application/json' } });
-  if (res.status === 429 && attempt < 4) {
-    await new Promise((r) => setTimeout(r, 1000 * 2 ** attempt));
+  const res = await fetch(url, {
+    headers: { accept: 'application/json' },
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  if (res.status === 429 && attempt < 2) {
+    await new Promise((r) => setTimeout(r, 750 * (attempt + 1)));
     return getJson(url, attempt + 1);
   }
   if (!res.ok) throw new Error(`${res.status} from ${url}`);
@@ -43,7 +51,18 @@ export async function getOwnedGroups(userId) {
   return owned;
 }
 
-export async function collectStats(userId) {
+export async function fetchLiveCounts(universeIds) {
+  const counts = new Map();
+  const batches = await Promise.all(chunk(universeIds, 50).map((ids) => getJson(`https://games.roblox.com/v1/games?universeIds=${ids.join(',')}`)));
+  for (const batch of batches) {
+    for (const d of batch.data || []) {
+      counts.set(d.id, { playing: d.playing || 0, visits: d.visits || 0, favorites: d.favoritedCount || 0, name: d.name, placeId: d.rootPlaceId, creator: d.creator, created: d.created, updated: d.updated });
+    }
+  }
+  return counts;
+}
+
+export async function discoverGames(userId) {
   const groups = await getOwnedGroups(userId);
 
   const owners = [
@@ -51,66 +70,74 @@ export async function collectStats(userId) {
     ...groups.map((g) => ({ type: 'Group', id: g.id, name: g.name, url: `https://games.roblox.com/v2/groups/${g.id}/games?accessFilter=Public` })),
   ];
 
-  // A few owners at a time keeps us under Roblox rate limits. If one owner fails, the request
-  // fails rather than silently publishing totals that are too low.
+  // A few owners at a time keeps us under Roblox rate limits. If any owner fails the whole
+  // discovery fails, so callers keep the previous complete list instead of a partial one.
   const ownerOf = new Map();
-  for (const batch of chunk(owners, 5)) {
+  for (const batch of chunk(owners, 8)) {
     const results = await Promise.all(batch.map((o) => paginate(o.url)));
     results.forEach((games, i) => games.forEach((g) => ownerOf.set(g.id, batch[i])));
   }
 
   const universeIds = [...ownerOf.keys()];
-  const details = new Map();
   const thumbs = new Map();
-  const icons = new Map();
-  for (const ids of chunk(universeIds, 50)) {
-    const list = ids.join(',');
-    const [info, thumbRes, iconRes] = await Promise.all([
-      getJson(`https://games.roblox.com/v1/games?universeIds=${list}`),
-      getJson(`https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=${list}&countPerUniverse=1&size=768x432&format=Png&isCircular=false`).catch(() => ({ data: [] })),
-      getJson(`https://thumbnails.roblox.com/v1/games/icons?universeIds=${list}&size=512x512&format=Png&isCircular=false`).catch(() => ({ data: [] })),
-    ]);
-    for (const d of info.data || []) details.set(d.id, d);
-    for (const t of thumbRes.data || []) {
-      const img = t.thumbnails?.find((x) => x.state === 'Completed');
-      if (img) thumbs.set(t.universeId, img.imageUrl);
-    }
-    for (const t of iconRes.data || []) if (t.state === 'Completed') icons.set(t.targetId, t.imageUrl);
-  }
+  const [counts] = await Promise.all([
+    fetchLiveCounts(universeIds),
+    ...chunk(universeIds, 50).map(async (ids) => {
+      const res = await getJson(`https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds=${ids.join(',')}&countPerUniverse=1&size=768x432&format=Png&isCircular=false`).catch(() => ({ data: [] }));
+      for (const t of res.data || []) {
+        const img = t.thumbnails?.find((x) => x.state === 'Completed');
+        if (img) thumbs.set(t.universeId, img.imageUrl);
+      }
+    }),
+  ]);
 
   const games = universeIds
+    .filter((id) => counts.has(id))
     .map((id) => {
-      const d = details.get(id);
-      if (!d) return null;
+      const d = counts.get(id);
       const owner = ownerOf.get(id);
       return {
         universeId: id,
-        placeId: d.rootPlaceId,
+        placeId: d.placeId,
         name: d.name,
-        description: d.description || '',
-        playing: d.playing || 0,
-        visits: d.visits || 0,
-        favorites: d.favoritedCount || 0,
+        playing: d.playing,
+        visits: d.visits,
+        favorites: d.favorites,
         created: d.created,
         updated: d.updated,
         owner: { type: owner.type, id: owner.id, name: d.creator?.name || owner.name },
-        thumbnail: thumbs.get(id) || icons.get(id) || null,
-        icon: icons.get(id) || null,
-        url: `https://www.roblox.com/games/${d.rootPlaceId}`,
+        thumbnail: thumbs.get(id) || null,
+        url: `https://www.roblox.com/games/${d.placeId}`,
       };
+    });
+
+  return { discoveredAt: new Date().toISOString(), groups, games };
+}
+
+// Combine a discovered game list with (optionally) fresher live counts into the API payload.
+export function buildStats(list, counts, countsAt) {
+  const games = list.games
+    .map((g) => {
+      const c = counts?.get(g.universeId);
+      return c ? { ...g, playing: c.playing, visits: c.visits, favorites: c.favorites, name: c.name } : g;
     })
-    .filter(Boolean)
     .sort((a, b) => b.playing - a.playing || b.visits - a.visits);
 
   return {
-    updatedAt: new Date().toISOString(),
+    updatedAt: countsAt || list.discoveredAt,
+    discoveredAt: list.discoveredAt,
     totals: {
       liveCcu: games.reduce((s, g) => s + g.playing, 0),
       visits: games.reduce((s, g) => s + g.visits, 0),
       games: games.length,
-      groups: groups.length,
+      groups: list.groups.length,
     },
-    groups,
+    groups: list.groups,
     games,
   };
+}
+
+// Convenience for scripts/tests: full fresh stats in one call.
+export async function collectStats(userId) {
+  return buildStats(await discoverGames(userId));
 }

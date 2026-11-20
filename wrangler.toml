@@ -1,0 +1,9 @@
+name = "smashgames"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-12-07"
+
+# Stores the discovered Roblox game list so visitors never wait on discovery.
+# See functions/api/roblox-stats.js.
+[[kv_namespaces]]
+binding = "ROBLOX_STATS"
+id = "08b004eb92594f8bba0f19cf4ac4103a"

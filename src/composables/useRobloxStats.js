@@ -11,7 +11,7 @@ let inflight = null;
 async function load() {
   if (inflight) return inflight;
   loading.value = !stats.value;
-  inflight = fetch('/api/roblox-stats')
+  inflight = fetch('/api/roblox-stats', { signal: AbortSignal.timeout(20000) })
     .then(async (res) => {
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
@@ -19,7 +19,7 @@ async function load() {
       error.value = null;
     })
     .catch((err) => {
-      error.value = err.message;
+      error.value = err.name === 'TimeoutError' ? 'the request timed out' : err.message;
     })
     .finally(() => {
       loading.value = false;
