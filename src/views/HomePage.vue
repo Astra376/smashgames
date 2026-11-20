@@ -86,6 +86,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#home { --section-gap: 72px; }
+
 .home-page {
   position: relative;
   min-height: 100vh;
@@ -116,7 +118,7 @@ export default defineComponent({
 
 .hero-content {
   text-align: center;
-  padding: calc(var(--nav-height) + 2rem) 20px 4rem;
+  padding: calc(var(--nav-height) + 2rem) 20px var(--section-gap);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -209,13 +211,17 @@ export default defineComponent({
 .section-wrapper {
   position: relative;
   z-index: 2;
-  padding: 100px 20px;
+  padding: var(--section-gap) 20px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .section-header { text-align: center; margin-bottom: 60px; }
-.section-header h2 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: white; }
+.section-header h2 { font-size: 3rem; font-weight: 700; margin: 0 0 1rem; color: white; }
+
+/* The carousel already reserves ~56px under the cards for its dots, so trim the section's own
+   bottom padding to keep the gap below the cards equal to the gap above the heading. */
+#featured-games { padding-bottom: 16px; }
 .section-header .divider { width: 80px; height: 4px; background: var(--primary); margin: 0 auto; border-radius: 2px; }
 
 @keyframes fadeUp {
