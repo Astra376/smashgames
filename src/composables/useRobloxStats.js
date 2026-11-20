@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 // Shared across components so the home and games pages reuse one request.
 const stats = ref(null);
@@ -28,6 +28,11 @@ async function load() {
   return inflight;
 }
 
+// Small, quiet games are hidden from listings (they still count toward the totals).
+export const MIN_LISTED_VISITS = 100000;
+export const isListed = (g) => g.visits >= MIN_LISTED_VISITS || g.playing > 0;
+const listedGames = computed(() => (stats.value?.games || []).filter(isListed));
+
 export function formatCompact(n) {
   return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n || 0);
 }
@@ -49,5 +54,5 @@ export function useRobloxStats({ refreshMs = 60000 } = {}) {
       timer = null;
     }
   });
-  return { stats, error, loading, reload: load };
+  return { stats, listedGames, error, loading, reload: load };
 }

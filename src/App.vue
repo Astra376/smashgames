@@ -38,12 +38,12 @@
           <p>Breaking barriers. Smashing expectations.</p>
         </div>
         <div class="social-links">
-          <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
-          <a href="https://x.com/PlaySmashGames" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
-          <a href="https://www.youtube.com/@SmashGamesOfficial" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="https://www.roblox.com/communities/8338753" target="_blank" rel="noopener" aria-label="Roblox"><i class="fas fa-gamepad"></i></a>
+          <a v-if="socials.discord" :href="socials.discord" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
+          <a :href="socials.x" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+          <a :href="socials.youtube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a :href="socials.roblox" target="_blank" rel="noopener" aria-label="Roblox community"><i class="fas fa-gamepad"></i></a>
         </div>
-        <p class="copyright">© 2024 Smash Games. All rights reserved.</p>
+        <p class="copyright">© {{ year }} Smash Games. All rights reserved.</p>
       </div>
     </footer>
   </div>
@@ -52,6 +52,7 @@
 <script>
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { socials } from '@/config/socials';
 
 export default defineComponent({
   name: 'App',
@@ -83,7 +84,7 @@ export default defineComponent({
       window.removeEventListener('resize', closeMobileMenu);
     });
 
-    return { isScrolled, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu };
+    return { isScrolled, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu, socials, year: new Date().getFullYear() };
   }
 });
 </script>

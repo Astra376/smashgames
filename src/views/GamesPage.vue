@@ -13,7 +13,7 @@
     <ErrorMessage v-else-if="error && !stats" :message="`Couldn't load games: ${error}`" />
 
     <div v-else-if="stats" class="games-grid">
-      <div v-for="game in stats.games" :key="game.universeId" class="game-card">
+      <div v-for="game in listedGames" :key="game.universeId" class="game-card">
         <div class="image-wrapper">
           <img v-if="game.thumbnail" :src="game.thumbnail" :alt="game.name" loading="lazy">
           <span v-if="game.playing > 0" class="live-badge"><span class="dot"></span>{{ formatNumber(game.playing) }} playing</span>
@@ -49,8 +49,8 @@ export default defineComponent({
   name: 'GamesPage',
   components: { StatsBar, LoadingSpinner, ErrorMessage },
   setup() {
-    const { stats, error, loading } = useRobloxStats();
-    return { stats, error, loading, formatCompact, formatNumber };
+    const { stats, listedGames, error, loading } = useRobloxStats();
+    return { stats, listedGames, error, loading, formatCompact, formatNumber };
   }
 });
 </script>

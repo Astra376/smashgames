@@ -16,20 +16,21 @@
           </h1>
 
           <div class="cta-container">
-            <router-link to="/careers" class="cta-button primary">
-              <span>Join the Team</span>
-            </router-link>
+            <a :href="socials.roblox" target="_blank" rel="noopener" class="cta-button primary">
+              <i class="fas fa-users"></i> Join Roblox Community
+            </a>
             <router-link to="/games" class="cta-button secondary">
               Explore Games
             </router-link>
+            <router-link to="/careers" class="cta-button secondary">
+              Join the Team
+            </router-link>
           </div>
+
+          <StatsBar size="hero" class="hero-stats" />
         </div>
       </div>
     </div>
-
-    <section id="live-stats" class="section-wrapper stats-section">
-      <StatsBar />
-    </section>
 
     <section id="featured-games" class="section-wrapper">
       <div class="section-header">
@@ -41,8 +42,8 @@
       <LoadingSpinner v-else />
     </section>
 
-    <section id="about" class="section-wrapper alt-bg">
-      <AboutSection />
+    <section id="community" class="section-wrapper">
+      <SocialSection />
     </section>
   </section>
 </template>
@@ -50,11 +51,12 @@
 <script>
 import { defineComponent, computed } from 'vue';
 import FeaturedGames from '@/components/FeaturedGames.vue';
-import AboutSection from '@/components/AboutSection.vue';
+import SocialSection from '@/components/SocialSection.vue';
 import StatsBar from '@/components/StatsBar.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import ErrorMessage from '@/components/ErrorMessage.vue';
-import { useRobloxStats, formatCompact, formatNumber } from '@/composables/useRobloxStats';
+import { useRobloxStats } from '@/composables/useRobloxStats';
+import { socials } from '@/config/socials';
 
 const FEATURED_COUNT = 10;
 
@@ -62,31 +64,23 @@ export default defineComponent({
   name: 'HomePage',
   components: {
     FeaturedGames,
-    AboutSection,
+    SocialSection,
     StatsBar,
     LoadingSpinner,
     ErrorMessage,
   },
   setup() {
-    const { stats, error } = useRobloxStats();
+    const { listedGames, error } = useRobloxStats();
 
-    // Top games by visits, shaped for the carousel.
+    // Top games by visits for the carousel.
     const featuredGames = computed(() =>
-      [...(stats.value?.games || [])]
+      listedGames.value
         .filter((g) => g.thumbnail)
         .sort((a, b) => b.visits - a.visits)
         .slice(0, FEATURED_COUNT)
-        .map((g) => ({
-          id: g.universeId,
-          title: g.name,
-          description: `${formatNumber(g.playing)} playing · ${formatCompact(g.visits)} visits`,
-          thumbnail: g.thumbnail,
-          released: true,
-          link: g.url,
-        }))
     );
 
-    return { featuredGames, error };
+    return { featuredGames, error, socials };
   }
 });
 </script>
@@ -94,7 +88,7 @@ export default defineComponent({
 <style scoped>
 .home-page {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -122,7 +116,7 @@ export default defineComponent({
 
 .hero-content {
   text-align: center;
-  padding: 0 20px;
+  padding: calc(var(--nav-height) + 2rem) 20px 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -132,7 +126,7 @@ export default defineComponent({
 .logo-wrapper { position: relative; margin-bottom: 2rem; display: flex; justify-content: center; }
 
 .logo {
-  width: clamp(200px, 30vw, 400px);
+  width: clamp(160px, 22vw, 320px);
   position: relative;
   z-index: 2;
   opacity: 0;
@@ -143,7 +137,7 @@ export default defineComponent({
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 200;
   line-height: 1.1;
-  margin-bottom: 3rem;
+  margin: 0 0 2.5rem;
   letter-spacing: -1px;
   color: white;
   opacity: 0;
@@ -159,12 +153,15 @@ export default defineComponent({
 
 .cta-container {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 1.5rem;
   opacity: 0;
   animation: fadeUp 1s ease-out 0.6s forwards;
 }
 
 .cta-button {
+  box-sizing: border-box;
   position: relative;
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
@@ -178,6 +175,13 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+}
+
+.hero-stats {
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  opacity: 0;
+  animation: fadeUp 1s ease-out 0.8s forwards;
 }
 
 .cta-button.primary {
@@ -209,8 +213,6 @@ export default defineComponent({
   max-width: 1400px;
   margin: 0 auto;
 }
-
-.stats-section { padding-top: 60px; padding-bottom: 20px; }
 
 .section-header { text-align: center; margin-bottom: 60px; }
 .section-header h2 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: white; }
